@@ -1,0 +1,45 @@
+# Node.js related
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# TypeScript related
+*.tsbuildinfo
+dist/
+build/
+
+# VS Code related
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# dotenv environment variable files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Frontend build outputs
+frontend/dist/
+frontend/build/
+
+# Backend build outputs
+server/dist/
+
+# npm packages from the frontend and backend
+frontend/node_modules/
+server/node_modules/
+
+# IDE configuration files (JetBrains, etc.)
+.idea/
+
+# Coverage reports
+coverage/
+
