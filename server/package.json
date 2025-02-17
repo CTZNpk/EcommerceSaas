@@ -3,7 +3,9 @@
     "dev": "ts-node index.ts"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "mongoose": "^8.10.1",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
