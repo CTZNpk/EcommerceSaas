@@ -10,6 +10,8 @@ const port = 3000;
 
 const mongoUrl = process.env.MONGODB_URL!;
 
+app.use(express.json());
+
 mongoose
   .connect(mongoUrl)
   .then(() => {
