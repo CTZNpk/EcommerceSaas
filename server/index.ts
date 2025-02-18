@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import userRouter from "@routes/user_routes";
+import { Request, Response } from "express";
 
 dotenv.config();
 
@@ -22,3 +24,8 @@ mongoose
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({ message: "Hello World" });
+});
+app.use("/api/users", userRouter);
