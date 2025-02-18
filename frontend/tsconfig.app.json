@@ -14,15 +14,10 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@components/*": ["./components/*"],
-      "@utils/*": ["./utils/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@pages/*": ["./pages/*"],
-      "@api/*": ["./api/*"]
+      "@/*": ["./src/*"]
     },
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
