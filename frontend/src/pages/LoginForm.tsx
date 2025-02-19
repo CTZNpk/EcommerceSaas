@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -43,6 +44,12 @@ const LoginForm = () => {
 
   const { data, error: fetchError, loading, triggerFetch } = useFetch();
 
+  const navigate = useNavigate();
+
+  const navigateToSignUp = () => {
+    navigate("/signup");
+  };
+
   useEffect(() => {
     if (fetchError) {
       setFormError(fetchError);
@@ -63,7 +70,11 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br 
+      from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
+      dark:to-gray-900 p-4"
+    >
       <Card className="w-full max-w-md border-0 shadow-2xl">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
@@ -151,6 +162,7 @@ const LoginForm = () => {
               type="button"
               className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
               disabled={loading}
+              onClick={navigateToSignUp}
             >
               Sign up
             </button>

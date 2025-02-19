@@ -6,6 +6,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
     accountType: {
       type: String,
       enum: ["admin", "user", "vendor"],
@@ -36,6 +42,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   isActive: boolean;
+  address: string;
+  phoneNumber: string;
 }
 
 const User = mongoose.model<IUser>("User", userSchema);

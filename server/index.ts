@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRouter from "@routes/user_routes";
 import { Request, Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -31,4 +32,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(cors());
+app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
