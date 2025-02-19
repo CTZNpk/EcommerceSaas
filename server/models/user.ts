@@ -2,11 +2,11 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const userSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: true,
     },
-    role: {
+    accountType: {
       type: String,
       enum: ["admin", "user", "vendor"],
       default: "user",
@@ -31,8 +31,8 @@ const userSchema = new Schema(
 );
 
 export interface IUser extends Document {
-  userName: string;
-  role: string;
+  username: string;
+  accountType: string;
   email: string;
   password: string;
   isActive: boolean;

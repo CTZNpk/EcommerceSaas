@@ -13,8 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useState } from "react";
-import useAuth from "@/hooks/useAuth";
+import { Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import useFetch from "@/hooks/useFetch";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -32,20 +33,32 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
-  const [error, setError] = useState("");
-  const { handleSignIn } = useAuth();
+  const [formError, setFormError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const { data, error: fetchError, loading, triggerFetch } = useFetch();
+
+  useEffect(() => {
+    if (fetchError) {
+      setFormError(fetchError);
+    }
+  }, [fetchError, setError]);
+
+  const onSubmit = async (formData: LoginFormValues) => {
+    setFormError("");
     try {
-      setError("");
-      await handleSignIn(data);
+      await triggerFetch("/users/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      console.log(data);
     } catch (err) {
-      setError("An error occurred");
+      setFormError("Unable to connect to the server. Please try again.");
     }
   };
 
@@ -62,9 +75,9 @@ const LoginForm = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {error && (
+            {formError && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{formError}</AlertDescription>
               </Alert>
             )}
 
@@ -76,6 +89,7 @@ const LoginForm = () => {
                 placeholder="you@example.com"
                 {...register("email")}
                 className={errors.email ? "border-red-500" : ""}
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -87,9 +101,10 @@ const LoginForm = () => {
               <Input
                 id="password"
                 type="password"
-                placeholder="password"
+                placeholder="••••••••"
                 {...register("password")}
                 className={errors.password ? "border-red-500" : ""}
+                disabled={loading}
               />
               {errors.password && (
                 <p className="text-sm text-red-500">
@@ -101,8 +116,16 @@ const LoginForm = () => {
             <Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
+              disabled={loading}
             >
-              Sign In
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </CardContent>
@@ -118,16 +141,16 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" disabled={loading}>
             Continue with Google
           </Button>
 
           <p className="text-sm text-center text-muted-foreground">
-            Already have an account?
+            Don't have an account?{" "}
             <button
               type="button"
-              // onClick={toggleForm}
               className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
+              disabled={loading}
             >
               Sign up
             </button>

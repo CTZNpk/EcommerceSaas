@@ -1,9 +1,9 @@
-import AuthPage from "./pages/AuthPage";
+import { SignupForm } from "./pages/SignUpForm";
 
 function App() {
   return (
     <div>
-      <AuthPage />
+      <SignupForm />
     </div>
   );
 }

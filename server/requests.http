@@ -12,8 +12,8 @@ content-type: application/json
 
 {
   "username": "haider",
-  "email" : "haide7@gmail.com",
-  "password": "My_password1",
+  "email" : "haid1919@gmail.com",
+  "password": "My_password12",
   "role": "user"
 }
 

@@ -20,12 +20,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import useAuth from "@/hooks/useAuth";
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { AccountType } from "@/interfaces/authInterfaces";
+import useFetch from "@/hooks/useFetch";
 
 const signupSchema = z
   .object({
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .max(20, "Username must be less than 20 characters")
+      .regex(
+        /^[a-zA-Z0-9_-]+$/,
+        "Username can only contain letters, numbers, underscores, and hyphens",
+      ),
     email: z.string().email("Please enter a valid email address"),
     password: z
       .string()
@@ -36,7 +45,6 @@ const signupSchema = z
         /[^A-Za-z0-9\s]/,
         "Password must contain at least one special character",
       ),
-
     confirmPassword: z.string(),
     accountType: z.nativeEnum(AccountType, {
       required_error: "Please select an account type",
@@ -50,21 +58,36 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 const SignupForm = () => {
-  const [error, setError] = useState("");
-  const { handleSignUp } = useAuth();
+  const [formError, setFormError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
   } = useForm<SignupFormValues>({ resolver: zodResolver(signupSchema) });
 
-  const onSubmit = async (data: SignupFormValues) => {
+  const { data, error: fetchError, loading, triggerFetch } = useFetch();
+
+  useEffect(() => {
+    if (fetchError) {
+      setFormError(fetchError);
+    }
+  }, [fetchError, setError]);
+
+  const onSubmit = async (formData: SignupFormValues) => {
+    setFormError(""); // Clear previous errors
     try {
-      setError("");
-      await handleSignUp(data);
+      await triggerFetch("/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(data);
     } catch (err) {
-      setError("An error occurred");
+      setFormError("Unable to connect to the server. Please try again.");
     }
   };
 
@@ -81,11 +104,28 @@ const SignupForm = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {error && (
+            {formError && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{formError}</AlertDescription>
               </Alert>
             )}
+
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="johndoe"
+                {...register("username")}
+                className={errors.username ? "border-red-500" : ""}
+                disabled={loading}
+              />
+              {errors.username && (
+                <p className="text-sm text-red-500">
+                  {errors.username.message}
+                </p>
+              )}
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -95,6 +135,7 @@ const SignupForm = () => {
                 placeholder="you@example.com"
                 {...register("email")}
                 className={errors.email ? "border-red-500" : ""}
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -107,6 +148,7 @@ const SignupForm = () => {
                 onValueChange={(value) =>
                   setValue("accountType", value as AccountType)
                 }
+                disabled={loading}
               >
                 <SelectTrigger
                   className={errors.accountType ? "border-red-500" : ""}
@@ -130,9 +172,10 @@ const SignupForm = () => {
               <Input
                 id="password"
                 type="password"
-                placeholder="password"
+                placeholder="••••••••"
                 {...register("password")}
                 className={errors.password ? "border-red-500" : ""}
+                disabled={loading}
               />
               {errors.password && (
                 <p className="text-sm text-red-500">
@@ -146,9 +189,10 @@ const SignupForm = () => {
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder="confirm password"
+                placeholder="••••••••"
                 {...register("confirmPassword")}
                 className={errors.confirmPassword ? "border-red-500" : ""}
+                disabled={loading}
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500">
@@ -160,8 +204,16 @@ const SignupForm = () => {
             <Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
+              disabled={loading}
             >
-              Sign In
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </CardContent>
@@ -177,16 +229,16 @@ const SignupForm = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" disabled={loading}>
             Continue with Google
           </Button>
 
           <p className="text-sm text-center text-muted-foreground">
-            Already have an account?
+            Already have an account?{" "}
             <button
               type="button"
-              // onClick={toggleForm}
               className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
+              disabled={loading}
             >
               Sign in
             </button>

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "@routes/user_routes";
 import { Request, Response } from "express";
+import cors from "cors";
 
 dotenv.config();
 
@@ -28,4 +29,6 @@ app.listen(port, () => {
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Hello World" });
 });
-app.use("/api/users", userRouter);
+
+app.use(cors());
+app.use("/api/v1/users", userRouter);
