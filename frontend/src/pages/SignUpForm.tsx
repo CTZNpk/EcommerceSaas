@@ -74,6 +74,11 @@ const SignupForm = () => {
     navigate("/login");
   };
 
+  //TODO Change this later
+  const navigateToProfileCreationScreen = () => {
+    navigate("/profile-creation");
+  };
+
   // const navigateToProfileScreen= () => {
   //   navigate("/login");
   // };
@@ -89,14 +94,22 @@ const SignupForm = () => {
   const onSubmit = async (formData: SignupFormValues) => {
     setFormError(""); // Clear previous errors
     try {
-      await triggerFetch("/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      await triggerFetch(
+        "/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+        true,
+      );
+
       console.log(data);
+      if (!fetchError) {
+        navigateToProfileCreationScreen();
+      }
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
     }

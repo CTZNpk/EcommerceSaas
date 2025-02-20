@@ -31,15 +31,15 @@ export async function register(req: Request, res: Response) {
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+      sameSite: "lax", // Use 'lax' for cross-origin navigation supportsameSite: "strict",
       maxAge: 15 * 60 * 1000, //15 days
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+      sameSite: "lax", // Use 'lax' for cross-origin navigation support
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
     });
 

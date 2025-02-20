@@ -31,6 +31,11 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Hello World" });
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 app.use("/api/v1/users", userRouter);

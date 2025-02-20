@@ -14,6 +14,7 @@ export const authMiddleware = (
 ): void => {
   const token = req.cookies?.accessToken;
 
+  console.log(req.cookies);
   if (!token) {
     res.status(401).json({ message: "Unauthorized: No token provided" });
     return;

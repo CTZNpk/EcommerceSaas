@@ -6,7 +6,11 @@ const useFetch = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const triggerFetch = async (url: string, options: RequestInit | null) => {
+  const triggerFetch = async (
+    url: string,
+    options: RequestInit | null,
+    includeCookies: boolean = false,
+  ) => {
     setLoading(true);
     setError(null);
     try {
@@ -19,6 +23,7 @@ const useFetch = () => {
           "content-type": "application/json",
           ...(options?.headers || {}),
         },
+        credentials: includeCookies ? "include" : "omit",
       };
       const response = await fetch(completeUrl, mergedOptions);
 

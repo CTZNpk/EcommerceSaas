@@ -59,10 +59,14 @@ const LoginForm = () => {
   const onSubmit = async (formData: LoginFormValues) => {
     setFormError("");
     try {
-      await triggerFetch("/users/login", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
+      await triggerFetch(
+        "/users/login",
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+        },
+        true,
+      );
       console.log(data);
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
