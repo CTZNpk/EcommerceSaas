@@ -1,9 +1,11 @@
-import { AccountType } from "./authInterfaces";
-import { IResponseInterface } from "./responseInterface";
+import { AccountType } from "./accountEnum";
 
-export interface IUserInterface extends IResponseInterface {
+export interface IUser {
   id: string;
   username: string;
   email: string;
   accountType: AccountType;
+  imageUrl: string;
+  phoneNumber: string;
+  address: string;
 }

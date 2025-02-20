@@ -17,6 +17,7 @@ import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/userStore";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -43,12 +44,17 @@ const LoginForm = () => {
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
   const { error: fetchError, loading, triggerFetch } = useFetch();
+  const { setUser } = useUserStore();
 
   const navigate = useNavigate();
 
   const navigateToSignUp = () => {
     navigate("/signup");
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   useEffect(() => {
     if (fetchError) {
@@ -59,7 +65,7 @@ const LoginForm = () => {
   const onSubmit = async (formData: LoginFormValues) => {
     setFormError("");
     try {
-      await triggerFetch(
+      const data = await triggerFetch(
         "/users/login",
         {
           method: "POST",
@@ -67,6 +73,11 @@ const LoginForm = () => {
         },
         true,
       );
+      if (data && !fetchError) {
+        //TODO
+        setUser(data);
+        navigateToSignUp();
+      }
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
     }

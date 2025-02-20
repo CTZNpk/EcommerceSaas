@@ -22,9 +22,10 @@ import {
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import { AccountType } from "@/interfaces/authInterfaces";
 import useFetch from "@/hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+import { AccountType } from "@/interfaces/accountEnum";
+import { useUserStore } from "@/store/userStore";
 
 const signupSchema = z
   .object({
@@ -68,6 +69,7 @@ const SignupForm = () => {
     setError,
   } = useForm<SignupFormValues>({ resolver: zodResolver(signupSchema) });
 
+  const { setUser } = useUserStore();
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
@@ -108,6 +110,7 @@ const SignupForm = () => {
 
       console.log(data);
       if (data && !fetchError) {
+        setUser(data);
         navigateToProfileCreationScreen();
       }
     } catch (err) {

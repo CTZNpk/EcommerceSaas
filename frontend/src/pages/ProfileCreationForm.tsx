@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import {
   Card,
@@ -15,14 +15,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
+import { useUserStore } from "@/store/userStore";
 
 const ProfileCreationForm = () => {
   const [profileImage, setProfileImage] = useState(
     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vectors%2Fperson-placeholder-vectors&psig=AOvVaw3OVUZ5cvyyQXKr1EPTaIgU&ust=1740054314362000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPDkpM3dz4sDFQAAAAAdAAAAABAE",
   );
+
+  const { setUser, user } = useUserStore();
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { error: fetchError, loading, triggerFetch } = useFetch();
   const [updateSuccess, setUpdateSucces] = useState<boolean>();
 
@@ -34,38 +37,53 @@ const ProfileCreationForm = () => {
     }
   };
 
-  const onSubmit = async (data: FieldValues) => {
-    const formData = new FormData();
-
-    if (imageFile) {
-      formData.append("image", imageFile);
+  useEffect(() => {
+    if (user) {
+      reset(user);
     }
+    console.log(user?.phoneNumber);
+    if (user?.imageUrl) {
+      setProfileImage(user.imageUrl);
+    }
+    console.log(user);
+  }, []);
 
-    const urlData = await triggerFetch(
-      "/users/upload",
-      {
-        method: "POST",
-        body: formData,
-      },
-      true,
-      false,
-    );
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      const formData = new FormData();
 
-    console.log(urlData);
-    const url = urlData.imageUrl;
-    console.log(url);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
 
-    data.imageUrl = url;
-    data = await triggerFetch(
-      "/users/update",
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-      true,
-    );
-    setUpdateSucces(true);
-    console.log(data);
+      const urlData = await triggerFetch(
+        "/users/upload",
+        {
+          method: "POST",
+          body: formData,
+        },
+        true,
+        false,
+      );
+
+      const url = urlData.imageUrl;
+
+      data.imageUrl = url;
+      const responseData = await triggerFetch(
+        "/users/update",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        true,
+      );
+
+      if (data) {
+        setUser(responseData);
+        setUpdateSucces(true);
+        console.log(data);
+      }
+    } catch (e) {}
   };
 
   return (
@@ -134,11 +152,11 @@ const ProfileCreationForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phoneNumber">Phone Number</Label>
               <Input
-                id="phone"
+                id="phoneNumber"
                 placeholder="123-456-7890"
-                {...register("phone")}
+                {...register("phoneNumber")}
                 required
                 disabled={loading}
               />
