@@ -45,7 +45,7 @@ export async function register(req: Request, res: Response) {
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
+      data: {
         id: createdUser._id,
         username: createdUser.username,
         email: createdUser.email,
@@ -90,7 +90,7 @@ export async function login(req: Request, res: Response) {
     });
     res.status(201).json({
       message: "User login successful",
-      user: {
+      data: {
         id: user._id,
         username: user.username,
         email: user.email,

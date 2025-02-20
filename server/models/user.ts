@@ -2,6 +2,9 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const userSchema = new Schema(
   {
+    imageUrl: {
+      type: String,
+    },
     username: {
       type: String,
       required: true,
@@ -37,6 +40,7 @@ const userSchema = new Schema(
 );
 
 export interface IUser extends Document {
+  imageUrl: string;
   username: string;
   accountType: string;
   email: string;

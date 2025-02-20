@@ -5,6 +5,8 @@ import userRouter from "@routes/user_routes";
 import { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 
@@ -14,7 +16,9 @@ const port = 3000;
 
 const mongoUrl = process.env.MONGODB_URL!;
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+export const upload = multer({ dest: "uploads/" }); // Temporary folder
 
 mongoose
   .connect(mongoUrl)
@@ -37,5 +41,17 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
+
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
+console.log(process.env.CLOUDINARY_API_KEY);
+console.log(process.env.CLOUDINARY_API_SECRET);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export default cloudinary;

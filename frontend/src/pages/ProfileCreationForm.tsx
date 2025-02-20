@@ -20,20 +20,43 @@ const ProfileCreationForm = () => {
   const [profileImage, setProfileImage] = useState(
     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vectors%2Fperson-placeholder-vectors&psig=AOvVaw3OVUZ5cvyyQXKr1EPTaIgU&ust=1740054314362000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPDkpM3dz4sDFQAAAAAdAAAAABAE",
   );
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { register, handleSubmit } = useForm();
-  const { data, error: fetchError, loading, triggerFetch } = useFetch();
+  const { error: fetchError, loading, triggerFetch } = useFetch();
+  const [updateSuccess, setUpdateSucces] = useState<boolean>();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
+      setImageFile(e.target.files[0]);
       setProfileImage(imageUrl);
     }
   };
 
   const onSubmit = async (data: FieldValues) => {
-    console.log("Profile submitted");
-    await triggerFetch(
+    const formData = new FormData();
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    const urlData = await triggerFetch(
+      "/users/upload",
+      {
+        method: "POST",
+        body: formData,
+      },
+      true,
+      false,
+    );
+
+    console.log(urlData);
+    const url = urlData.imageUrl;
+    console.log(url);
+
+    data.imageUrl = url;
+    data = await triggerFetch(
       "/users/update",
       {
         method: "POST",
@@ -41,6 +64,7 @@ const ProfileCreationForm = () => {
       },
       true,
     );
+    setUpdateSucces(true);
     console.log(data);
   };
 
@@ -63,7 +87,7 @@ const ProfileCreationForm = () => {
             </Alert>
           )}
 
-          {data && (
+          {updateSuccess && (
             <Alert className="mb-6">
               <AlertDescription>Profile created successfully!</AlertDescription>
             </Alert>

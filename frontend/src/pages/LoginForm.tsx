@@ -42,7 +42,7 @@ const LoginForm = () => {
     setError,
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
-  const { data, error: fetchError, loading, triggerFetch } = useFetch();
+  const { error: fetchError, loading, triggerFetch } = useFetch();
 
   const navigate = useNavigate();
 
@@ -67,7 +67,6 @@ const LoginForm = () => {
         },
         true,
       );
-      console.log(data);
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
     }

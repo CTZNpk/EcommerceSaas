@@ -83,7 +83,7 @@ const SignupForm = () => {
   //   navigate("/login");
   // };
 
-  const { data, error: fetchError, loading, triggerFetch } = useFetch();
+  const { error: fetchError, loading, triggerFetch } = useFetch();
 
   useEffect(() => {
     if (fetchError) {
@@ -94,7 +94,7 @@ const SignupForm = () => {
   const onSubmit = async (formData: SignupFormValues) => {
     setFormError(""); // Clear previous errors
     try {
-      await triggerFetch(
+      const data = await triggerFetch(
         "/users/register",
         {
           method: "POST",
@@ -107,7 +107,7 @@ const SignupForm = () => {
       );
 
       console.log(data);
-      if (!fetchError) {
+      if (data && !fetchError) {
         navigateToProfileCreationScreen();
       }
     } catch (err) {
