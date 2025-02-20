@@ -4,11 +4,13 @@ import { Response } from "express";
 
 export async function updateProfile(req: CustomRequest, res: Response) {
   try {
-    const { userId, username, address, phoneNumber } = req.body;
+    const { username, address, phoneNumber } = req.body;
+    const userId = req.userId;
 
     const existingUser = await User.findById(userId);
     if (!existingUser) {
-      return res.status(404).json({ message: "User does not exist" });
+      res.status(404).json({ message: "User does not exist" });
+      return;
     }
 
     existingUser.username = username || existingUser.username;
@@ -23,8 +25,8 @@ export async function updateProfile(req: CustomRequest, res: Response) {
         username: existingUser.username,
         email: existingUser.email,
         accountType: existingUser.accountType,
-        phoneNumber: phoneNumber,
-        address: address,
+        phoneNumber: existingUser.phoneNumber,
+        address: existingUser.address,
       },
     });
   } catch (error) {
