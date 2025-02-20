@@ -33,6 +33,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: { type: String },
   },
   {
     timestamps: true,
@@ -48,6 +54,8 @@ export interface IUser extends Document {
   isActive: boolean;
   address: string;
   phoneNumber: string;
+  verificationToken: string | null;
+  isVerified: boolean;
 }
 
 const User = mongoose.model<IUser>("User", userSchema);

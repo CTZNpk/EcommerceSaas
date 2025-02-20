@@ -53,10 +53,6 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-    console.log(user);
-  }, []);
-
-  useEffect(() => {
     if (fetchError) {
       setFormError(fetchError);
     }

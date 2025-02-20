@@ -9,11 +9,6 @@ export async function updateProfile(req: CustomRequest, res: Response) {
     const { username, address, phoneNumber, imageUrl } = req.body;
     const userId = req.userId;
 
-    console.log(username);
-    console.log(address);
-    console.log(phoneNumber);
-    console.log(imageUrl);
-
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       res.status(404).json({ message: "User does not exist" });
@@ -25,12 +20,6 @@ export async function updateProfile(req: CustomRequest, res: Response) {
     existingUser.phoneNumber = phoneNumber || existingUser.phoneNumber;
     existingUser.imageUrl = imageUrl || existingUser.imageUrl;
     await existingUser.save();
-    console.log("THIS SHOULD CHANGE");
-    console.log(existingUser.username);
-    console.log(existingUser.address);
-    console.log(existingUser.phoneNumber);
-    console.log(existingUser.imageUrl);
-    console.log(existingUser.accountType);
 
     res.status(200).json({
       message: "User updated successfully",
@@ -80,3 +69,4 @@ export async function uploadImage(req: Request, res: Response) {
     res.status(500).json({ message: "Image upload failed" });
   }
 }
+
