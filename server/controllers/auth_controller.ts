@@ -8,7 +8,7 @@ import {
 
 export async function register(req: Request, res: Response) {
   try {
-    const { username, email, password, role } = req.body;
+    const { username, email, password, accountType } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -18,10 +18,10 @@ export async function register(req: Request, res: Response) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser: IUser = new User({
-      userName: username,
       email,
+      username,
       password: hashedPassword,
-      role,
+      accountType,
       isActive: true,
     });
 
@@ -31,25 +31,25 @@ export async function register(req: Request, res: Response) {
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+      sameSite: "lax", // Use 'lax' for cross-origin navigation supportsameSite: "strict",
       maxAge: 15 * 60 * 1000, //15 days
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+      sameSite: "lax", // Use 'lax' for cross-origin navigation support
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
     });
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
+      data: {
         id: createdUser._id,
-        userName: createdUser.userName,
+        username: createdUser.username,
         email: createdUser.email,
-        role: createdUser.role,
+        accountType: createdUser.accountType,
       },
     });
   } catch (error) {
@@ -90,11 +90,11 @@ export async function login(req: Request, res: Response) {
     });
     res.status(201).json({
       message: "User login successful",
-      user: {
+      data: {
         id: user._id,
-        userName: user.userName,
+        username: user.username,
         email: user.email,
-        role: user.role,
+        accountType: user.accountType,
       },
     });
   } catch (error) {

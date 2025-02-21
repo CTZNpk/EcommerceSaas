@@ -2,11 +2,20 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const userSchema = new Schema(
   {
-    userName: {
+    imageUrl: {
+      type: String,
+    },
+    username: {
       type: String,
       required: true,
     },
-    role: {
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    accountType: {
       type: String,
       enum: ["admin", "user", "vendor"],
       default: "user",
@@ -24,6 +33,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: { type: String },
   },
   {
     timestamps: true,
@@ -31,11 +46,16 @@ const userSchema = new Schema(
 );
 
 export interface IUser extends Document {
-  userName: string;
-  role: string;
+  imageUrl: string;
+  username: string;
+  accountType: string;
   email: string;
   password: string;
   isActive: boolean;
+  address: string;
+  phoneNumber: string;
+  verificationToken: string | null;
+  isVerified: boolean;
 }
 
 const User = mongoose.model<IUser>("User", userSchema);
