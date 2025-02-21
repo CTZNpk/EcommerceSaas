@@ -1,5 +1,9 @@
 import { register, login } from "@controllers/auth_controller";
-import { sendVerification, verifyEmail } from "@controllers/email_controller";
+import {
+  confirmVerification,
+  sendVerification,
+  verifyEmail,
+} from "@controllers/email_controller";
 import { updateProfile, uploadImage } from "@controllers/profile_controller";
 import { authMiddleware } from "@middlewares/authMiddleware";
 import { validateEmailPasswordMiddleware } from "@middlewares/validateEmailAndPasswordMiddleware";
@@ -13,7 +17,8 @@ userRouter.post("/register", validateEmailPasswordMiddleware, register);
 userRouter.post("/login", validateEmailPasswordMiddleware, login);
 userRouter.post("/update", authMiddleware, updateProfile);
 userRouter.post("/upload", authMiddleware, upload.single("image"), uploadImage);
-userRouter.post("/verify-email", authMiddleware, verifyEmail);
+userRouter.post("/verify-email", verifyEmail);
 userRouter.post("/send-verification", authMiddleware, sendVerification);
+userRouter.post("/confirm-verification", authMiddleware, confirmVerification);
 
 export default userRouter;

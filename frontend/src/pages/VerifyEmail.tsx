@@ -8,14 +8,18 @@ const VerifyEmail: React.FC = () => {
   const { triggerFetch } = useFetch();
 
   useEffect(() => {
+    console.log("HELLLO BOIS");
     const verifyUser = async () => {
       const token = searchParams.get("token");
+      console.log(token);
       if (!token) return setMessage("Invalid token.");
 
       try {
         const data = await triggerFetch("/users/verify-email", {
+          method: "POST",
           body: JSON.stringify({ token: token }),
         });
+        console.log(data);
         setMessage(data);
       } catch (error) {
         setMessage("Verification failed.");

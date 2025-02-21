@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const userSchema = new Schema(
   {
+    //TODO change
     imageUrl: {
       type: String,
     },

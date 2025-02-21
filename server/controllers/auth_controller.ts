@@ -61,7 +61,10 @@ export async function register(req: Request, res: Response) {
 export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
     const user = await User.findOne({ email });
+    console.log(user)
     if (!user) {
       res.status(401).json({ message: "Invalid Credentials" });
       return;
@@ -88,7 +91,7 @@ export async function login(req: Request, res: Response) {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
     });
-    res.status(201).json({
+    res.status(200).json({
       message: "User login successful",
       data: {
         id: user._id,

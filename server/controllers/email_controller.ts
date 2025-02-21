@@ -13,8 +13,6 @@ export async function sendVerification(req: CustomRequest, res: Response) {
 
     const userId = req.userId!;
 
-    console.log(userId);
-    console.log(email);
     const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({
@@ -63,12 +61,15 @@ export async function sendVerification(req: CustomRequest, res: Response) {
 
 export async function verifyEmail(req: Request, res: Response) {
   const { token } = req.body;
+  console.log(token);
 
   try {
+    //TODO ON NOT VERIFYING IT SHOULD NOT THROW 500
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: string;
     };
 
+    console.log(decoded.id);
     const user = await User.findById(decoded.id);
 
     if (!user) {
@@ -76,10 +77,31 @@ export async function verifyEmail(req: Request, res: Response) {
       return;
     }
     user.isVerified = true;
+    console.log(user.isVerified);
     user.verificationToken = null;
     await user.save();
 
     res.status(200).json({ message: "Email verified successfully!" });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+export async function confirmVerification(req: CustomRequest, res: Response) {
+  const userId = req.userId;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(400).json({ message: "User not found." });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Request Successful!",
+      data: { verified: user.isVerified },
+    });
   } catch (error) {
     console.error("Verification error:", error);
     res.status(500).json({ message: "Internal server error." });
