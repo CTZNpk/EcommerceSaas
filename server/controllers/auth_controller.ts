@@ -35,6 +35,7 @@ export async function register(req: Request, res: Response) {
       secure: process.env.NODE_ENV === "production", // Use HTTPS in production
       sameSite: "lax", // Use 'lax' for cross-origin navigation supportsameSite: "strict",
       maxAge: 15 * 60 * 1000, //15 days
+      path: "/", // Ensure it's available for all routes
     });
 
     res.cookie("refreshToken", refreshToken, {
@@ -42,6 +43,7 @@ export async function register(req: Request, res: Response) {
       secure: process.env.NODE_ENV === "production", // Use HTTPS in production
       sameSite: "lax", // Use 'lax' for cross-origin navigation support
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+      path: "/", // Ensure it's available for all routes
     });
 
     res.status(201).json({
@@ -84,6 +86,7 @@ export async function login(req: Request, res: Response) {
       // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 15 * 60 * 1000, //15 days
+      path: "/", // Ensure it's available for all routes
     });
 
     res.cookie("refreshToken", refreshToken, {
@@ -91,6 +94,7 @@ export async function login(req: Request, res: Response) {
       // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+      path: "/", // Ensure it's available for all routes
     });
     res.status(200).json({
       message: "User login successful",
@@ -116,6 +120,7 @@ export async function handleGoogleAuth(req: Request, res: Response) {
       // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 15 * 60 * 1000, //15 days
+      path: "/", // Ensure it's available for all routes
     });
 
     res.cookie("refreshToken", refreshToken, {
@@ -123,6 +128,7 @@ export async function handleGoogleAuth(req: Request, res: Response) {
       // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+      path: "/", // Ensure it's available for all routes
     });
 
     res.redirect("http://localhost:5173/dashboard");

@@ -1,4 +1,4 @@
-import { CustomRequest } from "@middlewares/authMiddleware";
+import { CustomRequest } from "@middlewares/auth";
 import User from "@models/user";
 import { Response, Request } from "express";
 import fs from "fs";
@@ -69,4 +69,3 @@ export async function uploadImage(req: Request, res: Response) {
     res.status(500).json({ message: "Image upload failed" });
   }
 }
-

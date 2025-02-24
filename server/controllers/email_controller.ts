@@ -3,7 +3,7 @@ import { generateAccessToken } from "@services/auth_services";
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
-import { CustomRequest } from "@middlewares/authMiddleware";
+import { CustomRequest } from "@middlewares/auth";
 import bcrypt from "bcrypt";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
