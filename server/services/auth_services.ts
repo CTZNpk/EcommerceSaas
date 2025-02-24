@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import User, { IUser } from "@models/user";
+import { Profile } from "passport";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
@@ -18,4 +20,11 @@ export function validatePassword(password: string): boolean {
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
   return passwordRegex.test(password);
+}
+
+export async function createUserFromGoogle(profile: Profile) {
+  const user = await User.create({
+    email: profile.emails?.[0]?.value ?? null,
+  });
+  return user;
 }

@@ -81,9 +81,25 @@ const SignupForm = () => {
     navigate("/profile-creation");
   };
 
-  // const navigateToProfileScreen= () => {
-  //   navigate("/login");
-  // };
+  const continueWithGoogle = async () => {
+    setFormError("");
+  window.location.href = "http://localhost:3000/api/v1/users/google"; 
+    // try {
+    //   const data = await triggerFetch(
+    //     "/users/google",
+    //     {
+    //       method: "GET",
+    //     },
+    //     true,
+    //   );
+    //   if (data && !fetchError) {
+    //     setUser(data);
+    //     navigateToProfileCreationScreen();
+    //   }
+    // } catch (err) {
+    //   setFormError("Unable to connect to the server. Please try again.");
+    // }
+  };
 
   const { error: fetchError, loading, triggerFetch } = useFetch();
 
@@ -96,6 +112,7 @@ const SignupForm = () => {
   const onSubmit = async (formData: SignupFormValues) => {
     setFormError(""); // Clear previous errors
     try {
+
       const data = await triggerFetch(
         "/users/register",
         {
@@ -260,7 +277,12 @@ const SignupForm = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" disabled={loading}>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={loading}
+            onClick={continueWithGoogle}
+          >
             Continue with Google
           </Button>
 

@@ -8,7 +8,6 @@ const userSchema = new Schema(
     },
     username: {
       type: String,
-      required: true,
     },
     phoneNumber: {
       type: String,
@@ -28,7 +27,6 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     isActive: {
       type: Boolean,

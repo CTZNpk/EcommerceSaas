@@ -64,7 +64,7 @@ export async function login(req: Request, res: Response) {
     console.log(email);
     console.log(password);
     const user = await User.findOne({ email });
-    console.log(user)
+    console.log(user);
     if (!user) {
       res.status(401).json({ message: "Invalid Credentials" });
       return;
@@ -100,6 +100,32 @@ export async function login(req: Request, res: Response) {
         accountType: user.accountType,
       },
     });
+  } catch (error) {
+    console.log("Registration error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export async function handleGoogleAuth(req: Request, res: Response) {
+  try {
+    const { user, accessToken, refreshToken } = req.user as any;
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, //15 days
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+    });
+
+    res.redirect("http://localhost:5173/dashboard"); 
+    res.json({ message: "User Google Authentication Successful", data: user });
   } catch (error) {
     console.log("Registration error:", error);
     res.status(500).json({ message: "Internal Server Error" });

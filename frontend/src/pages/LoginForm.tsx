@@ -48,8 +48,8 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const navigateToSignUp = () => {
-    navigate("/signup");
+  const navigateToDashboard = () => {
+    navigate("/dashboard");
   };
 
   useEffect(() => {
@@ -57,6 +57,25 @@ const LoginForm = () => {
       setFormError(fetchError);
     }
   }, [fetchError, setError]);
+
+  const continueWithGoogle = async () => {
+    setFormError("");
+    try {
+      const data = await triggerFetch(
+        "/users/google",
+        {
+          method: "GET",
+        },
+        true,
+      );
+      if (data && !fetchError) {
+        setUser(data);
+        navigateToDashboard();
+      }
+    } catch (err) {
+      setFormError("Unable to connect to the server. Please try again.");
+    }
+  };
 
   const onSubmit = async (formData: LoginFormValues) => {
     setFormError("");
@@ -72,7 +91,7 @@ const LoginForm = () => {
       if (data && !fetchError) {
         //TODO
         setUser(data);
-        navigateToSignUp();
+        navigateToDashboard();
       }
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
@@ -162,7 +181,12 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" disabled={loading}>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={loading}
+            onClick={continueWithGoogle}
+          >
             Continue with Google
           </Button>
 
@@ -172,7 +196,7 @@ const LoginForm = () => {
               type="button"
               className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
               disabled={loading}
-              onClick={navigateToSignUp}
+              onClick={navigateToDashboard}
             >
               Sign up
             </button>

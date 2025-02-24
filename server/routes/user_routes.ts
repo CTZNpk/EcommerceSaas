@@ -1,4 +1,8 @@
-import { register, login } from "@controllers/auth_controller";
+import {
+  register,
+  login,
+  handleGoogleAuth,
+} from "@controllers/auth_controller";
 import {
   confirmVerification,
   sendVerification,
@@ -9,6 +13,7 @@ import { authMiddleware } from "@middlewares/authMiddleware";
 import { validateEmailPasswordMiddleware } from "@middlewares/validateEmailAndPasswordMiddleware";
 import express from "express";
 import multer from "multer";
+import passport from "passport";
 
 const userRouter = express.Router();
 const upload = multer({ dest: "uploads/" });
@@ -20,5 +25,14 @@ userRouter.post("/upload", authMiddleware, upload.single("image"), uploadImage);
 userRouter.post("/verify-email", verifyEmail);
 userRouter.post("/send-verification", authMiddleware, sendVerification);
 userRouter.post("/confirm-verification", authMiddleware, confirmVerification);
+userRouter.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  handleGoogleAuth,
+);
+userRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
 
 export default userRouter;
