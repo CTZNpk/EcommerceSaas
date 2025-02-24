@@ -29,6 +29,7 @@ export async function register(req: Request, res: Response) {
     const accessToken = generateAccessToken(String(createdUser._id));
     const refreshToken = generateRefreshToken(String(createdUser._id));
 
+    //TODO MAKE A SEPARATE FUNCTION
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use HTTPS in production
@@ -124,7 +125,7 @@ export async function handleGoogleAuth(req: Request, res: Response) {
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
     });
 
-    res.redirect("http://localhost:5173/dashboard"); 
+    res.redirect("http://localhost:5173/dashboard");
     res.json({ message: "User Google Authentication Successful", data: user });
   } catch (error) {
     console.log("Registration error:", error);

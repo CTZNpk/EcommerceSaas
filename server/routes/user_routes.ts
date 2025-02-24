@@ -5,6 +5,8 @@ import {
 } from "@controllers/auth_controller";
 import {
   confirmVerification,
+  resetPasssword,
+  sendResetPassword,
   sendVerification,
   verifyEmail,
 } from "@controllers/email_controller";
@@ -34,5 +36,7 @@ userRouter.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
+userRouter.post("/reset-password", resetPasssword);
+userRouter.post("/forgot-password", sendResetPassword);
 
 export default userRouter;
