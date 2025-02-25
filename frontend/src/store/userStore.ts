@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { IUser } from "@/interfaces/userInterface";
+import { IUser } from "@/types/userInterface";
 
 interface UserState {
   user: IUser | null;
@@ -16,7 +16,7 @@ export const useUserStore = create<UserState>()(
       clearUser: () => set({ user: null }),
     }),
     {
-      name: "user-storage", // Key for localStorage
+      name: "user-storage",
     },
   ),
 );

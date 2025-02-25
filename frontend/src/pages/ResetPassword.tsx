@@ -1,17 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import * as COMP from "@/components";
 import { useState, useEffect } from "react";
 import { Loader2, KeyRound, CheckCircle2 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
@@ -80,7 +70,7 @@ const ResetPasswordForm = () => {
       });
 
       setSuccess(true);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const renderContent = () => {
@@ -99,12 +89,12 @@ const ResetPasswordForm = () => {
               with your new password.
             </p>
           </div>
-          <Button
+          <COMP.Button
             onClick={() => (window.location.href = "/login")}
             className="bg-green-600 hover:bg-green-700"
           >
             Go to Login
-          </Button>
+          </COMP.Button>
         </div>
       );
     }
@@ -112,18 +102,18 @@ const ResetPasswordForm = () => {
     if (!token) {
       return (
         <div className="text-center space-y-6">
-          <Alert variant="destructive">
-            <AlertDescription>
+          <COMP.Alert variant="destructive">
+            <COMP.AlertDescription>
               Invalid or missing reset token. Please request a new password
               reset link.
-            </AlertDescription>
-          </Alert>
-          <Button
+            </COMP.AlertDescription>
+          </COMP.Alert>
+          <COMP.Button
             onClick={() => (window.location.href = "/forgot-password")}
             className="bg-purple-600 hover:bg-purple-700"
           >
             Request New Reset Link
-          </Button>
+          </COMP.Button>
         </div>
       );
     }
@@ -131,14 +121,14 @@ const ResetPasswordForm = () => {
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {formError && (
-          <Alert variant="destructive">
-            <AlertDescription>{formError}</AlertDescription>
-          </Alert>
+          <COMP.Alert variant="destructive">
+            <COMP.AlertDescription>{formError}</COMP.AlertDescription>
+          </COMP.Alert>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="password">New Password</Label>
-          <Input
+          <COMP.Label htmlFor="password">New Password</COMP.Label>
+          <COMP.Input
             id="password"
             type="password"
             placeholder="••••••••"
@@ -152,8 +142,8 @@ const ResetPasswordForm = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input
+          <COMP.Label htmlFor="confirmPassword">Confirm Password</COMP.Label>
+          <COMP.Input
             id="confirmPassword"
             type="password"
             placeholder="••••••••"
@@ -168,7 +158,7 @@ const ResetPasswordForm = () => {
           )}
         </div>
 
-        <Button
+        <COMP.Button
           type="submit"
           className="w-full bg-purple-600 hover:bg-purple-700"
           disabled={loading}
@@ -181,7 +171,7 @@ const ResetPasswordForm = () => {
           ) : (
             "Reset Password"
           )}
-        </Button>
+        </COMP.Button>
       </form>
     );
   };
@@ -192,22 +182,22 @@ const ResetPasswordForm = () => {
       from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
-      <Card className="w-full max-w-md border-0 shadow-2xl">
-        <CardHeader className="space-y-1">
+      <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
+        <COMP.CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <KeyRound className="h-12 w-12 text-purple-600" />
           </div>
-          <CardTitle className="text-2xl font-bold text-center">
+          <COMP.CardTitle className="text-2xl font-bold text-center">
             {success ? "Success!" : "Reset Password"}
-          </CardTitle>
-          <CardDescription className="text-center">
+          </COMP.CardTitle>
+          <COMP.CardDescription className="text-center">
             {success
               ? "Your password has been reset successfully"
               : "Enter your new password below"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>{renderContent()}</CardContent>
-      </Card>
+          </COMP.CardDescription>
+        </COMP.CardHeader>
+        <COMP.CardContent>{renderContent()}</COMP.CardContent>
+      </COMP.Card>
     </div>
   );
 };

@@ -1,30 +1,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import * as COMP from "@/components";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
 import { useNavigate } from "react-router-dom";
-import { AccountType } from "@/interfaces/accountEnum";
+import { AccountType } from "@/types/accountEnum";
 import { useUserStore } from "@/store/userStore";
 
 const signupSchema = z
@@ -83,22 +65,7 @@ const SignupForm = () => {
 
   const continueWithGoogle = async () => {
     setFormError("");
-  window.location.href = "http://localhost:3000/api/v1/users/google"; 
-    // try {
-    //   const data = await triggerFetch(
-    //     "/users/google",
-    //     {
-    //       method: "GET",
-    //     },
-    //     true,
-    //   );
-    //   if (data && !fetchError) {
-    //     setUser(data);
-    //     navigateToProfileCreationScreen();
-    //   }
-    // } catch (err) {
-    //   setFormError("Unable to connect to the server. Please try again.");
-    // }
+    window.location.href = "http://localhost:3000/api/v1/users/google";
   };
 
   const { error: fetchError, loading, triggerFetch } = useFetch();
@@ -112,7 +79,6 @@ const SignupForm = () => {
   const onSubmit = async (formData: SignupFormValues) => {
     setFormError(""); // Clear previous errors
     try {
-
       const data = await triggerFetch(
         "/users/register",
         {
@@ -141,26 +107,26 @@ const SignupForm = () => {
       from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
-      <Card className="w-full max-w-md border-0 shadow-2xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+      <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
+        <COMP.CardHeader className="space-y-1">
+          <COMP.CardTitle className="text-2xl font-bold text-center">
             Create Account
-          </CardTitle>
-          <CardDescription className="text-center">
+          </COMP.CardTitle>
+          <COMP.CardDescription className="text-center">
             Fill in your details to create a new account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </COMP.CardDescription>
+        </COMP.CardHeader>
+        <COMP.CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {formError && (
-              <Alert variant="destructive">
-                <AlertDescription>{formError}</AlertDescription>
-              </Alert>
+              <COMP.Alert variant="destructive">
+                <COMP.AlertDescription>{formError}</COMP.AlertDescription>
+              </COMP.Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
+              <COMP.Label htmlFor="username">Username</COMP.Label>
+              <COMP.Input
                 id="username"
                 type="text"
                 placeholder="johndoe"
@@ -176,8 +142,8 @@ const SignupForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
+              <COMP.Label htmlFor="email">Email</COMP.Label>
+              <COMP.Input
                 id="email"
                 type="email"
                 placeholder="you@example.com"
@@ -191,23 +157,25 @@ const SignupForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>Account Type</Label>
-              <Select
+              <COMP.Label>Account Type</COMP.Label>
+              <COMP.Select
                 onValueChange={(value) =>
                   setValue("accountType", value as AccountType)
                 }
                 disabled={loading}
               >
-                <SelectTrigger
+                <COMP.SelectTrigger
                   className={errors.accountType ? "border-red-500" : ""}
                 >
-                  <SelectValue placeholder="Select account type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">User Account</SelectItem>
-                  <SelectItem value="vendor">Vendor Account</SelectItem>
-                </SelectContent>
-              </Select>
+                  <COMP.SelectValue placeholder="Select account type" />
+                </COMP.SelectTrigger>
+                <COMP.SelectContent>
+                  <COMP.SelectItem value="user">User Account</COMP.SelectItem>
+                  <COMP.SelectItem value="vendor">
+                    Vendor Account
+                  </COMP.SelectItem>
+                </COMP.SelectContent>
+              </COMP.Select>
               {errors.accountType && (
                 <p className="text-sm text-red-500">
                   {errors.accountType.message}
@@ -216,8 +184,8 @@ const SignupForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
+              <COMP.Label htmlFor="password">Password</COMP.Label>
+              <COMP.Input
                 id="password"
                 type="password"
                 placeholder="••••••••"
@@ -233,8 +201,10 @@ const SignupForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
+              <COMP.Label htmlFor="confirmPassword">
+                Confirm Password
+              </COMP.Label>
+              <COMP.Input
                 id="confirmPassword"
                 type="password"
                 placeholder="••••••••"
@@ -249,7 +219,7 @@ const SignupForm = () => {
               )}
             </div>
 
-            <Button
+            <COMP.Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
               disabled={loading}
@@ -262,10 +232,10 @@ const SignupForm = () => {
               ) : (
                 "Create Account"
               )}
-            </Button>
+            </COMP.Button>
           </form>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        </COMP.CardContent>
+        <COMP.CardFooter className="flex flex-col space-y-4">
           <div className="relative w-full">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300" />
@@ -277,14 +247,14 @@ const SignupForm = () => {
             </div>
           </div>
 
-          <Button
+          <COMP.Button
             variant="outline"
             className="w-full"
             disabled={loading}
             onClick={continueWithGoogle}
           >
             Continue with Google
-          </Button>
+          </COMP.Button>
 
           <p className="text-sm text-center text-muted-foreground">
             Already have an account?{" "}
@@ -297,8 +267,8 @@ const SignupForm = () => {
               Sign in
             </button>
           </p>
-        </CardFooter>
-      </Card>
+        </COMP.CardFooter>
+      </COMP.Card>
     </div>
   );
 };

@@ -1,18 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import * as COMP from "@/components";
 import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
@@ -104,26 +93,26 @@ const LoginForm = () => {
       from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
-      <Card className="w-full max-w-md border-0 shadow-2xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+      <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
+        <COMP.CardHeader className="space-y-1">
+          <COMP.CardTitle className="text-2xl font-bold text-center">
             Welcome Back
-          </CardTitle>
-          <CardDescription className="text-center">
+          </COMP.CardTitle>
+          <COMP.CardDescription className="text-center">
             Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </COMP.CardDescription>
+        </COMP.CardHeader>
+        <COMP.CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {formError && (
-              <Alert variant="destructive">
-                <AlertDescription>{formError}</AlertDescription>
-              </Alert>
+              <COMP.Alert variant="destructive">
+                <COMP.AlertDescription>{formError}</COMP.AlertDescription>
+              </COMP.Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
+              <COMP.Label htmlFor="email">Email</COMP.Label>
+              <COMP.Input
                 id="email"
                 type="email"
                 placeholder="you@example.com"
@@ -137,8 +126,8 @@ const LoginForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
+              <COMP.Label htmlFor="password">Password</COMP.Label>
+              <COMP.Input
                 id="password"
                 type="password"
                 placeholder="••••••••"
@@ -153,7 +142,7 @@ const LoginForm = () => {
               )}
             </div>
 
-            <Button
+            <COMP.Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
               disabled={loading}
@@ -166,10 +155,10 @@ const LoginForm = () => {
               ) : (
                 "Sign In"
               )}
-            </Button>
+            </COMP.Button>
           </form>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        </COMP.CardContent>
+        <COMP.CardFooter className="flex flex-col space-y-4">
           <div className="relative w-full">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300" />
@@ -181,14 +170,14 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <Button
+          <COMP.Button
             variant="outline"
             className="w-full"
             disabled={loading}
             onClick={continueWithGoogle}
           >
             Continue with Google
-          </Button>
+          </COMP.Button>
 
           <p className="text-sm text-center text-muted-foreground">
             Don't have an account?{" "}
@@ -201,8 +190,8 @@ const LoginForm = () => {
               Sign up
             </button>
           </p>
-        </CardFooter>
-      </Card>
+        </COMP.CardFooter>
+      </COMP.Card>
     </div>
   );
 };

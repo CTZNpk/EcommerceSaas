@@ -1,17 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import * as COMP from "@/components";
 import { useState, useEffect } from "react";
 import { Loader2, Mail, CheckCircle2 } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
@@ -56,6 +46,7 @@ const ForgotPasswordForm = () => {
     }
   };
 
+  
   const renderContent = () => {
     if (success) {
       return (
@@ -76,19 +67,19 @@ const ForgotPasswordForm = () => {
             </p>
           </div>
           <div className="space-y-4">
-            <Button
+            <COMP.Button
               onClick={() => setSuccess(false)}
               variant="outline"
               className="w-full"
             >
               Try Another Email
-            </Button>
-            <Button
+            </COMP.Button>
+            <COMP.Button
               onClick={() => (window.location.href = "/login")}
               className="w-full bg-purple-600 hover:bg-purple-700"
             >
               Return to Login
-            </Button>
+            </COMP.Button>
           </div>
         </div>
       );
@@ -97,14 +88,14 @@ const ForgotPasswordForm = () => {
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {formError && (
-          <Alert variant="destructive">
-            <AlertDescription>{formError}</AlertDescription>
-          </Alert>
+          <COMP.Alert variant="destructive">
+            <COMP.AlertDescription>{formError}</COMP.AlertDescription>
+          </COMP.Alert>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
+          <COMP.Label htmlFor="email">Email Address</COMP.Label>
+          <COMP.Input
             id="email"
             type="email"
             placeholder="you@example.com"
@@ -117,7 +108,7 @@ const ForgotPasswordForm = () => {
           )}
         </div>
 
-        <Button
+        <COMP.Button
           type="submit"
           className="w-full bg-purple-600 hover:bg-purple-700"
           disabled={loading}
@@ -130,7 +121,7 @@ const ForgotPasswordForm = () => {
           ) : (
             "Send Reset Link"
           )}
-        </Button>
+        </COMP.Button>
 
         <div className="text-center">
           <button
@@ -151,22 +142,22 @@ const ForgotPasswordForm = () => {
       from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
-      <Card className="w-full max-w-md border-0 shadow-2xl">
-        <CardHeader className="space-y-1">
+      <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
+        <COMP.CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Mail className="h-12 w-12 text-purple-600" />
           </div>
-          <CardTitle className="text-2xl font-bold text-center">
+          <COMP.CardTitle className="text-2xl font-bold text-center">
             {success ? "Email Sent!" : "Forgot Password"}
-          </CardTitle>
-          <CardDescription className="text-center">
+          </COMP.CardTitle>
+          <COMP.CardDescription className="text-center">
             {success
               ? "Please check your email for reset instructions"
               : "Enter your email address to receive a password reset link"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>{renderContent()}</CardContent>
-      </Card>
+          </COMP.CardDescription>
+        </COMP.CardHeader>
+        <COMP.CardContent>{renderContent()}</COMP.CardContent>
+      </COMP.Card>
     </div>
   );
 };
