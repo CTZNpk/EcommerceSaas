@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "@/hooks/useFetch";
 import LoadingScreen from "@/pages/Loading";
 
-export function AdminProtectedRoute({ children }: { children: ReactNode }) {
+export function VendorProtectedRoute({ children }: { children: ReactNode }) {
   const { user } = useUserStore();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export function AdminProtectedRoute({ children }: { children: ReactNode }) {
     verifyUser();
   }, []);
 
-  if (!user || user.accountType != AccountType.ADMIN || error) {
+  if (!user || user.accountType != AccountType.VENDOR || error) {
     navigate("/login");
     return null;
   }
