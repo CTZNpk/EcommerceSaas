@@ -1,6 +1,6 @@
-import { generateAccessToken } from "@services/auth_services";
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { attachRefreshToken } from "utils/authUtils";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
@@ -22,7 +22,6 @@ export const auth = (
   }
 
   try {
-    // Verify access token
     const decoded = jwt.verify(accessToken, JWT_SECRET) as JwtPayload;
     req.userId = decoded.id;
     return next();
@@ -34,14 +33,7 @@ export const auth = (
           JWT_SECRET,
         ) as JwtPayload;
 
-        const newAccessToken = generateAccessToken(refreshDecoded.id);
-
-        res.cookie("accessToken", newAccessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge: 15 * 60 * 1000,
-        });
+        attachRefreshToken(res, refreshDecoded.id, refreshDecoded.accountType);
 
         req.userId = refreshDecoded.id;
         return next();

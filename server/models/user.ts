@@ -1,9 +1,33 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export enum AccountType {
+  USER = "user",
+  ADMIN = "admin",
+  VENDOR = "vendor",
+}
+
+export enum UserStatus {
+  VERIFIED = "verified",
+  UNVERIFIED = "unverified",
+  DELETED = "deleted",
+  BLOCKED = "blocked",
+}
+
+export interface IUser extends Document {
+  profilePic: string;
+  username: string;
+  accountType: AccountType;
+  email: string;
+  password: string;
+  address: string;
+  phoneNumber: string;
+  verificationToken: string | null;
+  status: UserStatus;
+}
+
 const userSchema = new Schema(
   {
-    //TODO change
-    imageUrl: {
+    profilePic: {
       type: String,
     },
     username: {
@@ -17,8 +41,7 @@ const userSchema = new Schema(
     },
     accountType: {
       type: String,
-      enum: ["admin", "user", "vendor"],
-      default: "user",
+      enum: Object.values(AccountType),
     },
     email: {
       type: String,
@@ -28,14 +51,10 @@ const userSchema = new Schema(
     password: {
       type: String,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-
-    isVerified: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: Object.values(UserStatus),
+      default: UserStatus.UNVERIFIED,
     },
     verificationToken: { type: String },
   },
@@ -43,19 +62,6 @@ const userSchema = new Schema(
     timestamps: true,
   },
 );
-
-export interface IUser extends Document {
-  imageUrl: string;
-  username: string;
-  accountType: string;
-  email: string;
-  password: string;
-  isActive: boolean;
-  address: string;
-  phoneNumber: string;
-  verificationToken: string | null;
-  isVerified: boolean;
-}
 
 const User = mongoose.model<IUser>("User", userSchema);
 export default User;
