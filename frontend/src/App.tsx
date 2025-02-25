@@ -4,6 +4,8 @@ import { LoginForm } from "./pages/LoginForm";
 import { EmailVerificationSent } from "./pages/EmailVerificationSent";
 import { ProfileCreationForm } from "./pages/ProfileCreationForm";
 import VerifyEmail from "./pages/VerifyEmail";
+import ResetPasswordForm from "./pages/ResetPassword";
+import ForgotPasswordForm from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/verification" element={<EmailVerificationSent />} />
         <Route path="/profile-creation" element={<ProfileCreationForm />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPasswordForm />} />
+        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,7 @@
 import { validateEmail, validatePassword } from "@services/auth_services";
 import { Request, Response, NextFunction } from "express";
 
-export function validateEmailPasswordMiddleware(
+export function validateEmailPassword(
   req: Request,
   res: Response,
   next: NextFunction,

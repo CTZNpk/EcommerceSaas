@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import * as COMP from "@/components";
 import { Loader2 } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
 import { useUserStore } from "@/store/userStore";
@@ -83,32 +71,34 @@ const ProfileCreationForm = () => {
         setUpdateSucces(true);
         console.log(data);
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
-      <Card className="w-full max-w-lg border-0 shadow-2xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
+      <COMP.Card className="w-full max-w-lg border-0 shadow-2xl">
+        <COMP.CardHeader>
+          <COMP.CardTitle className="text-2xl font-bold text-center">
             Create Profile
-          </CardTitle>
-          <CardDescription className="text-center">
+          </COMP.CardTitle>
+          <COMP.CardDescription className="text-center">
             Fill in your profile details
-          </CardDescription>
-        </CardHeader>
+          </COMP.CardDescription>
+        </COMP.CardHeader>
 
-        <CardContent>
+        <COMP.CardContent>
           {fetchError && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertDescription>{fetchError}</AlertDescription>
-            </Alert>
+            <COMP.Alert variant="destructive" className="mb-6">
+              <COMP.AlertDescription>{fetchError}</COMP.AlertDescription>
+            </COMP.Alert>
           )}
 
           {updateSuccess && (
-            <Alert className="mb-6">
-              <AlertDescription>Profile created successfully!</AlertDescription>
-            </Alert>
+            <COMP.Alert className="mb-6">
+              <COMP.AlertDescription>
+                Profile created successfully!
+              </COMP.AlertDescription>
+            </COMP.Alert>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -130,8 +120,8 @@ const ProfileCreationForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="username">Full Name</Label>
-              <Input
+              <COMP.Label htmlFor="username">Full Name</COMP.Label>
+              <COMP.Input
                 id="username"
                 placeholder="John Doe"
                 {...register("username")}
@@ -141,8 +131,8 @@ const ProfileCreationForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Textarea
+              <COMP.Label htmlFor="address">Address</COMP.Label>
+              <COMP.Textarea
                 id="address"
                 placeholder="123 Main St"
                 {...register("address")}
@@ -152,8 +142,8 @@ const ProfileCreationForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
+              <COMP.Label htmlFor="phoneNumber">Phone Number</COMP.Label>
+              <COMP.Input
                 id="phoneNumber"
                 placeholder="123-456-7890"
                 {...register("phoneNumber")}
@@ -163,8 +153,8 @@ const ProfileCreationForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="preferences">Preferences</Label>
-              <Textarea
+              <COMP.Label htmlFor="preferences">Preferences</COMP.Label>
+              <COMP.Textarea
                 id="preferences"
                 placeholder="Your preferences..."
                 {...register("preferences")}
@@ -172,7 +162,7 @@ const ProfileCreationForm = () => {
               />
             </div>
 
-            <Button
+            <COMP.Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
               disabled={loading}
@@ -185,16 +175,16 @@ const ProfileCreationForm = () => {
               ) : (
                 "Save Profile"
               )}
-            </Button>
+            </COMP.Button>
           </form>
-        </CardContent>
+        </COMP.CardContent>
 
-        <CardFooter className="flex justify-center">
+        <COMP.CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Complete your profile to get started.
           </p>
-        </CardFooter>
-      </Card>
+        </COMP.CardFooter>
+      </COMP.Card>
     </div>
   );
 };
