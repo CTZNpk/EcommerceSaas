@@ -6,6 +6,14 @@ import { ProfileCreationForm } from "./pages/ProfileCreationForm";
 import VerifyEmail from "./pages/VerifyEmail";
 import ResetPasswordForm from "./pages/ResetPassword";
 import ForgotPasswordForm from "./pages/ForgotPassword";
+import Dashboard from "./pages/admin/Dashboard";
+import Orders from "./pages/admin/Order";
+import Products from "./pages/admin/Products";
+import Customers from "./pages/admin/Customers";
+import Vendors from "./pages/admin/Vendors";
+import Analytics from "./pages/admin/Analytics";
+import ChatSupport from "./pages/admin/ChatSupport";
+import Settings from "./pages/admin/Settings";
 
 function App() {
   return (
@@ -18,6 +26,14 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/customers" element={<Customers />} />
+        <Route path="/vendors" element={<Vendors />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/chat" element={<ChatSupport />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );
