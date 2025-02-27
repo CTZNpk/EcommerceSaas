@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import User, { IUser } from "@models/user";
+import User, { IUser, UserStatus } from "@models/user";
 import bcrypt from "bcrypt";
 import { attachAccessToken, attachRefreshToken } from "utils/authUtils";
 import { createUserFromGoogle } from "@services/authServices";
@@ -48,8 +48,7 @@ class AuthController {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
-      console.log(user);
-      if (!user) {
+      if (!user || user.status == UserStatus.DELETED) {
         res.status(401).json({ message: "Invalid Credentials" });
         return;
       }

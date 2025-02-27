@@ -56,6 +56,8 @@ const userSchema = new Schema(
       enum: Object.values(UserStatus),
       default: UserStatus.UNVERIFIED,
     },
+    //TODO Total Spent
+    //TODO Total Sold for vendor?
     verificationToken: { type: String },
   },
   {

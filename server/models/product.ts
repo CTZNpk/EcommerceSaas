@@ -14,6 +14,7 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
+    //TODO
     vendorId: {
       type: Schema.Types.ObjectId,
       ref: "User",

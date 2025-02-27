@@ -1,4 +1,4 @@
-import { validateEmail, validatePassword } from "@services/auth_services";
+import { validateEmail, validatePassword } from "utils/authUtils";
 import { Request, Response, NextFunction } from "express";
 
 export function validateEmailPassword(
