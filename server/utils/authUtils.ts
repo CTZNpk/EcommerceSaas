@@ -22,7 +22,7 @@ export function attachAccessToken(
   id: string,
   accountType: string,
 ) {
-  const accessToken = jwt.sign({ id, role: accountType }, ENV.JWT_SECRET, {
+  const accessToken = jwt.sign({ id, accountType }, ENV.JWT_SECRET, {
     expiresIn: "15m",
   });
 

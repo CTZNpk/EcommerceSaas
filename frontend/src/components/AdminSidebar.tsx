@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import {
   BarChart,
-  Box,
   LayoutDashboard,
   MessageSquare,
   Package,
@@ -28,8 +27,7 @@ export function AdminSidebar() {
             { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
             { to: "/orders", icon: ShoppingCart, label: "Orders" },
             { to: "/products", icon: Package, label: "Products" },
-            { to: "/customers", icon: Users, label: "Customers" },
-            { to: "/vendors", icon: Box, label: "Vendors" },
+            { to: "/users", icon: Users, label: "Users" },
             { to: "/analytics", icon: BarChart, label: "Analytics" },
             { to: "/chat", icon: MessageSquare, label: "Chat Support" },
             { to: "/settings", icon: Settings, label: "Settings" },

@@ -20,7 +20,8 @@ const useFetch = () => {
         headers: contentTypeApplication
           ? {
               accept: "application/json",
-              "content-type": "application/json",
+              "Content-Type": "application/json",
+            
               ...(options?.headers || {}),
             }
           : { ...(options?.headers || {}) },

@@ -11,6 +11,6 @@ adminRouter.get("/", auth, isAdmin, (_: Request, res: Response) => {
 adminRouter.post("/update-user", auth, isAdmin, AdminController.updateUser);
 adminRouter.post("/delete-user", auth, isAdmin, AdminController.deleteUser);
 adminRouter.post("/block-user", auth, isAdmin, AdminController.blockUser);
-adminRouter.post("/get-users", auth, isAdmin, AdminController.getUsers);
+adminRouter.get("/get-users", auth, isAdmin, AdminController.getUsers);
 
 export default adminRouter;

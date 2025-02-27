@@ -65,7 +65,7 @@ const SignupForm = () => {
 
   const continueWithGoogle = async () => {
     setFormError("");
-    window.location.href = "http://localhost:3000/api/v1/users/google";
+    window.location.href = "http://localhost:3000/api/v1/auth/google";
   };
 
   const { error: fetchError, loading, triggerFetch } = useFetch();
@@ -80,7 +80,7 @@ const SignupForm = () => {
     setFormError(""); // Clear previous errors
     try {
       const data = await triggerFetch(
-        "/users/register",
+        "/auth/register",
         {
           method: "POST",
           headers: {
@@ -91,7 +91,6 @@ const SignupForm = () => {
         true,
       );
 
-      console.log(data);
       if (data && !fetchError) {
         setUser(data);
         navigateToProfileCreationScreen();

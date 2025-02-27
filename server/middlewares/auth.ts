@@ -1,7 +1,7 @@
 import { AccountType } from "@models/user";
 import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { attachRefreshToken } from "utils/authUtils";
+import jwt from "jsonwebtoken";
+import { attachAccessToken } from "utils/authUtils";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
@@ -15,9 +15,12 @@ export const auth = (
   res: Response,
   next: NextFunction,
 ): void => {
+  console.log(req.cookies);
   const accessToken = req.cookies?.accessToken;
   const refreshToken = req.cookies?.refreshToken;
 
+  console.log(accessToken);
+  console.log(refreshToken);
   if (!accessToken || !refreshToken) {
     res.status(401).json({ message: "Unauthorized: No token provided" });
     return;
@@ -31,18 +34,29 @@ export const auth = (
 
     req.userId = decoded.id;
     req.accountType = decoded.accountType;
+
+    console.log("ACCESS TOKEN");
+    console.log(req.userId);
+    console.log(req.accountType);
+
+    console.log(req.userId);
     return next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       try {
-        const refreshDecoded = jwt.verify(
-          refreshToken,
-          JWT_SECRET,
-        ) as JwtPayload;
+        const refreshDecoded = jwt.verify(refreshToken, JWT_SECRET) as {
+          id: string;
+          accountType: string;
+        };
 
-        attachRefreshToken(res, refreshDecoded.id, refreshDecoded.accountType);
+        attachAccessToken(res, refreshDecoded.id, refreshDecoded.accountType);
 
         req.userId = refreshDecoded.id;
+        req.accountType = refreshDecoded.id;
+
+        console.log("REFRESH TOKEN");
+        console.log(req.userId);
+        console.log(req.accountType);
         return next();
       } catch (refreshError) {
         res

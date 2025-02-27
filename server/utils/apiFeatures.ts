@@ -32,7 +32,7 @@ class APIFeatures {
       const sortBy = this.queryParams.sort.split(",").join(" "); // Convert 'field1,field2' -> 'field1 field2'
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-createdAt");
+      this.query = this.query.sort("-createdAt"); 
     }
     return this;
   }

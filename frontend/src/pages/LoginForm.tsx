@@ -37,8 +37,8 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const navigateToDashboard = () => {
-    navigate("/dashboard");
+  const navigateToSignup = () => {
+    navigate("/signup");
   };
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const LoginForm = () => {
       );
       if (data && !fetchError) {
         setUser(data);
-        navigateToDashboard();
+        navigateToSignup();
       }
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
@@ -70,7 +70,7 @@ const LoginForm = () => {
     setFormError("");
     try {
       const data = await triggerFetch(
-        "/users/login",
+        "/auth/login",
         {
           method: "POST",
           body: JSON.stringify(formData),
@@ -80,7 +80,7 @@ const LoginForm = () => {
       if (data && !fetchError) {
         //TODO
         setUser(data);
-        navigateToDashboard();
+        navigateToSignup();
       }
     } catch (err) {
       setFormError("Unable to connect to the server. Please try again.");
@@ -185,7 +185,7 @@ const LoginForm = () => {
               type="button"
               className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
               disabled={loading}
-              onClick={navigateToDashboard}
+              onClick={navigateToSignup}
             >
               Sign up
             </button>
