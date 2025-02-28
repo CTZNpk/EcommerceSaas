@@ -7,7 +7,7 @@ import APIFeatures from "utils/apiFeatures";
 class AdminController {
   static async deleteUser(req: Request, res: Response) {
     try {
-      const { userId } = req.body();
+      const { userId } = req.body;
 
       const user = await User.findById(userId);
       if (!user || user.status == UserStatus.DELETED) {
@@ -37,7 +37,7 @@ class AdminController {
 
   static async blockUser(req: Request, res: Response) {
     try {
-      const { userId } = req.body();
+      const { userId } = req.body;
 
       const user = await User.findById(userId);
       if (!user || user.status == UserStatus.DELETED) {
@@ -75,8 +75,7 @@ class AdminController {
         address,
         profilePic,
         phoneNumber,
-      } = req.body();
-
+      } = req.body;
       const user = await User.findById(userId);
       if (!user || user.status == UserStatus.DELETED) {
         res.status(404).json({ message: "User Does not exist" });
@@ -122,6 +121,8 @@ class AdminController {
     try {
       let query = User.find();
 
+      console.log("THIS IS QUERY");
+      console.log(req.query);
       const features = new APIFeatures(query, req.query)
         .filter()
         .search("username")
@@ -134,9 +135,11 @@ class AdminController {
       const newLastId = users.length > 0 ? users[users.length - 1]._id : null;
 
       res.json({
-        users,
-        lastId: newLastId,
-        hasMore: users.length === (req.query.limit || 10),
+        data: {
+          list: [...users],
+          lastId: newLastId,
+          hasMore: users.length === (req.query.limit || 10),
+        },
       });
     } catch (error) {
       console.error("Error:", error);

@@ -9,7 +9,14 @@ class APIFeatures {
 
   filter(): this {
     const queryObj = { ...this.queryParams };
-    const excludedFields = ["search", "sort", "lastId", "limit"];
+    const excludedFields = [
+      "search",
+      "sort",
+      "lastId",
+      "limit",
+      "accountType",
+      "username",
+    ];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);
@@ -20,8 +27,12 @@ class APIFeatures {
   }
 
   search(searchField: string): this {
-    if (this.queryParams.search) {
-      const searchRegex = new RegExp(this.queryParams.search, "i"); // Case-insensitive
+    const searchValue = this.queryParams[searchField];
+    if (!searchValue || searchValue.trim() === "") {
+      return this;
+    }
+    if (this.queryParams[searchField]) {
+      const searchRegex = new RegExp(`^${searchValue}`, "i"); // Case-insensitive
       this.query = this.query.find({ [searchField]: searchRegex });
     }
     return this;
@@ -32,12 +43,11 @@ class APIFeatures {
       const sortBy = this.queryParams.sort.split(",").join(" "); // Convert 'field1,field2' -> 'field1 field2'
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-createdAt"); 
+      this.query = this.query.sort("-createdAt");
     }
     return this;
   }
 
-  // 🔹 Pagination (Cursor-based)
   paginate(): this {
     const limit = parseInt(this.queryParams.limit) || 10;
     const lastId = this.queryParams.lastId;
@@ -52,6 +62,7 @@ class APIFeatures {
 
   // Get final query
   getQuery(): any {
+    console.log(this.queryParams);
     return this.query;
   }
 }

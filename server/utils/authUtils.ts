@@ -23,14 +23,14 @@ export function attachAccessToken(
   accountType: string,
 ) {
   const accessToken = jwt.sign({ id, accountType }, ENV.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "7d",
   });
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 15 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
     path: "/",
   });
 }

@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { Input } from "@/components/ui/input";
+import { Trash2, Ban } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -10,19 +10,52 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import usePaginatedFetch from "@/hooks/usePaginatedFetch";
-import { IUser } from "@/types/userInterface";
+import useFetch from "@/hooks/useFetch";
 
 export default function Users() {
-  const [filters, setFilters] = useState({ username: "", accountType: "" });
-  const { items, fetchMore, error, loading, hasMore, refetch } =
-    usePaginatedFetch<IUser>("/admin/get-users", {}, true);
+  const { items, fetchMore, error, loading, hasMore, setQueryParams } =
+    usePaginatedFetch("/admin/get-users", true);
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [filters]);
+  const { triggerFetch } = useFetch();
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    if (key == "accountType") {
+      if (value != "all") setQueryParams((prev) => ({ ...prev, [key]: value }));
+      else setQueryParams((prev) => ({ ...prev, [key]: "" }));
+    } else if (key == "username") {
+      setQueryParams((prev) => ({ ...prev, [key]: value }));
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      console.log(id);
+      await triggerFetch(
+        "/admin/delete-user",
+        {
+          method: "POST",
+          body: JSON.stringify({ userId: id }),
+        },
+        true,
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleBlock = async (id: string) => {
+    try {
+      console.log(id);
+      await triggerFetch(
+        "/admin/block-user",
+        {
+          method: "POST",
+          body: JSON.stringify({ userId: id }),
+        },
+        true,
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -33,8 +66,7 @@ export default function Users() {
         <div className="flex space-x-4">
           <Input
             placeholder="Search by name..."
-            value={filters.username}
-            onChange={(e) => handleFilterChange("name", e.target.value)}
+            onChange={(e) => handleFilterChange("username", e.target.value)}
           />
           <Select
             onValueChange={(value) => handleFilterChange("accountType", value)}
@@ -44,11 +76,11 @@ export default function Users() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="Vendors">Vendors</SelectItem>
-              <SelectItem value="User">User</SelectItem>
+              <SelectItem value="vendors">Vendors</SelectItem>
+              <SelectItem value="user">User</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={() => refetch()} disabled={loading}>
+          <Button onClick={() => fetchMore(true)} disabled={loading}>
             {loading ? "Loading..." : "Apply Filters"}
           </Button>
         </div>
@@ -71,17 +103,55 @@ export default function Users() {
             <>
               <ul className="divide-y divide-gray-200">
                 {items.map((item) => (
-                  <li key={item.id} className="p-4">
-                    <p className="font-semibold">{item.username}</p>
-                    <p className="text-sm text-gray-600">
-                      Account Type: {item.accountType}
-                    </p>
+                  <li
+                    key={item._id}
+                    className={`p-4 flex justify-between items-center ${item.status === "deleted"
+                        ? "opacity-50"
+                        : item.status === "blocked"
+                          ? "opacity-75"
+                          : ""
+                      }`}
+                  >
+                    <div>
+                      <p className="font-semibold">{item.username}</p>
+                      <p className="text-sm text-gray-600">
+                        Account Type: {item.accountType}
+                      </p>
+                      {item.status === "deleted" && (
+                        <p className="text-red-500 font-semibold mt-1">
+                          This user has been deleted
+                        </p>
+                      )}
+                      {item.status === "blocked" && (
+                        <p className="text-orange-500 font-semibold mt-1">
+                          This user has been blocked
+                        </p>
+                      )}
+                    </div>
+                    {item.status !== "deleted" && (
+                      <div className="flex space-x-3">
+                        {item.status !== "blocked" && (
+                          <button
+                            onClick={() => handleBlock(item._id)}
+                            className="text-orange-600 hover:text-orange-800"
+                          >
+                            <Ban className="w-5 h-5" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
               {hasMore && (
                 <div className="mt-4 text-center">
-                  <Button onClick={fetchMore} disabled={loading}>
+                  <Button onClick={() => fetchMore(false)} disabled={loading}>
                     {loading ? "Loading..." : "Load More"}
                   </Button>
                 </div>

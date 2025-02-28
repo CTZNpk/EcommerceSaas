@@ -19,8 +19,6 @@ export const auth = (
   const accessToken = req.cookies?.accessToken;
   const refreshToken = req.cookies?.refreshToken;
 
-  console.log(accessToken);
-  console.log(refreshToken);
   if (!accessToken || !refreshToken) {
     res.status(401).json({ message: "Unauthorized: No token provided" });
     return;
@@ -35,13 +33,10 @@ export const auth = (
     req.userId = decoded.id;
     req.accountType = decoded.accountType;
 
-    console.log("ACCESS TOKEN");
-    console.log(req.userId);
-    console.log(req.accountType);
-
-    console.log(req.userId);
     return next();
   } catch (error) {
+    console.log(error);
+    console.log(error instanceof jwt.TokenExpiredError);
     if (error instanceof jwt.TokenExpiredError) {
       try {
         const refreshDecoded = jwt.verify(refreshToken, JWT_SECRET) as {
@@ -52,11 +47,8 @@ export const auth = (
         attachAccessToken(res, refreshDecoded.id, refreshDecoded.accountType);
 
         req.userId = refreshDecoded.id;
-        req.accountType = refreshDecoded.id;
+        req.accountType = refreshDecoded.accountType;
 
-        console.log("REFRESH TOKEN");
-        console.log(req.userId);
-        console.log(req.accountType);
         return next();
       } catch (refreshError) {
         res

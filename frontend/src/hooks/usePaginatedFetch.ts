@@ -1,23 +1,26 @@
 import { useState } from "react";
 import useFetch from "./useFetch";
 
-const usePaginatedFetch = <T,>(
+const usePaginatedFetch = (
   endpoint: string,
-  initialParams: Record<string, string | number> = {},
   includeCookies: boolean = false,
 ) => {
   const { error, loading, triggerFetch } = useFetch();
-  const [items, setItems] = useState<T[]>([]);
+  const [items, setItems] = useState<any[]>([]);
   const [lastId, setLastId] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [queryParams, setQueryParams] = useState<
+    Record<string, string | number>
+  >({});
 
-  const fetchMore = async () => {
-    if (!hasMore || loading) return;
+  const fetchMore = async (isRefetch: boolean) => {
+    if (!isRefetch) if (!hasMore || loading) return;
 
     const params = new URLSearchParams({
-      ...initialParams,
-      lastId: lastId || "",
+      ...queryParams,
+      lastId: isRefetch ? "" : lastId || "",
     }).toString();
+
     const url = `${endpoint}?${params}`;
 
     const result = await triggerFetch(
@@ -29,20 +32,26 @@ const usePaginatedFetch = <T,>(
     );
 
     if (result) {
-      setItems((prev) => [...prev, ...result]);
-      setLastId(result.length > 0 ? result[result.length - 1]._id : null);
-      setHasMore(result.length > 0);
+      const listResult = result.list;
+      console.log(listResult);
+      if (isRefetch) {
+        setItems(listResult);
+      } else {
+        setItems((prev) => [...prev, ...listResult]);
+      }
+      setLastId(result.lastId);
+      setHasMore(result.hasMore);
     }
   };
 
-  const refetch = async () => {
-    setHasMore(true);
-    setItems([]);
-    setLastId(null);
-    await fetchMore();
+  return {
+    items,
+    fetchMore,
+    error,
+    loading,
+    hasMore,
+    setQueryParams,
   };
-
-  return { items, fetchMore, error, loading, hasMore, refetch };
 };
 
 export default usePaginatedFetch;
