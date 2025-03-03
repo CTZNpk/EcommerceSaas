@@ -3,10 +3,10 @@ import * as COMP from "@/components/ui/card";
 
 export default function LoadingScreen() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
       <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
         <COMP.CardHeader className="space-y-4 text-center">
-          <Loader2 className="h-16 w-16 text-purple-600 mx-auto animate-spin" />
+          <Loader2 className="h-16 w-16 text-blue-600 mx-auto animate-spin" />
           <COMP.CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
             Loading, Please Wait...
           </COMP.CardTitle>

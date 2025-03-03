@@ -90,7 +90,7 @@ const LoginForm = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gradient-to-br 
-      from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
+      from-blue-100 via-blue-200 to-blue-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
       <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
@@ -144,7 +144,7 @@ const LoginForm = () => {
 
             <COMP.Button
               type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (
@@ -183,7 +183,7 @@ const LoginForm = () => {
             Don't have an account?{" "}
             <button
               type="button"
-              className="text-purple-600 hover:text-purple-700 hover:underline focus:outline-none"
+              className="text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
               disabled={loading}
               onClick={navigateToSignup}
             >

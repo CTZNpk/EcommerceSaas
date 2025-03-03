@@ -110,7 +110,7 @@ const ResetPasswordForm = () => {
           </COMP.Alert>
           <COMP.Button
             onClick={() => (window.location.href = "/forgot-password")}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-blue-600 hover:bg-blue-700"
           >
             Request New Reset Link
           </COMP.Button>
@@ -160,7 +160,7 @@ const ResetPasswordForm = () => {
 
         <COMP.Button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700"
+          className="w-full bg-blue-600 hover:bg-blue-700"
           disabled={loading}
         >
           {loading ? (
@@ -179,13 +179,13 @@ const ResetPasswordForm = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gradient-to-br 
-      from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
+      from-blue-100 via-blue-200 to-blue-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
       <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
         <COMP.CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
-            <KeyRound className="h-12 w-12 text-purple-600" />
+            <KeyRound className="h-12 w-12 text-blue-600" />
           </div>
           <COMP.CardTitle className="text-2xl font-bold text-center">
             {success ? "Success!" : "Reset Password"}

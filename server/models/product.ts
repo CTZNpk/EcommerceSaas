@@ -18,6 +18,14 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
+    stock: {
+      type: Number,
+      required: true,
+    },
+    catgory: {
+      type: String,
+      required: true,
+    },
     vendor: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -57,6 +65,8 @@ export interface IProduct extends Document {
   rating: Number;
   ratingCount: number;
   purchaseCount: number;
+  stock: number;
+  category: string;
   isActive: boolean;
 }
 

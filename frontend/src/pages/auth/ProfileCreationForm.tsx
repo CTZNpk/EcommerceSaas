@@ -75,7 +75,7 @@ const ProfileCreationForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
       <COMP.Card className="w-full max-w-lg border-0 shadow-2xl">
         <COMP.CardHeader>
           <COMP.CardTitle className="text-2xl font-bold text-center">
@@ -107,7 +107,7 @@ const ProfileCreationForm = () => {
                 <img
                   src={profileImage}
                   alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-purple-600"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-blue-600"
                 />
                 <input
                   id="image-upload"
@@ -164,7 +164,7 @@ const ProfileCreationForm = () => {
 
             <COMP.Button
               type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (

@@ -13,8 +13,8 @@ export function AdminSidebar() {
   return (
     <div
       className="hidden md:flex h-screen w-64 flex-col fixed 
-      inset-y-0 z-50 border-r bg-gradient-to-br from-purple-200 
-      via-purple-300 to-purple-400 "
+      inset-y-0 z-50 border-r bg-gradient-to-br from-blue-100 
+      via-blue-200 to-blue-300 "
     >
       <div className="border-b p-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">

@@ -6,7 +6,8 @@ import { Response, Request } from "express";
 class VendorController {
   static async addProduct(req: CustomRequest, res: Response) {
     try {
-      const { productName, image, description, price } = req.body;
+      const { productName, image, description, price, category, stock } =
+        req.body;
       const userId = req.userId;
 
       const newProduct: IProduct = new Product({
@@ -15,6 +16,8 @@ class VendorController {
         description,
         price,
         vendor: userId,
+        category,
+        stock,
       });
 
       const createdProduct = await newProduct.save();

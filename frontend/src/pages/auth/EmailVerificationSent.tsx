@@ -54,10 +54,11 @@ const EmailVerificationSent = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br 
+      from-blue-100 via-blue-200 to-blue-300 p-4">
       <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
         <COMP.CardHeader className="space-y-4 text-center">
-          <MailCheck className="h-16 w-16 text-purple-600 mx-auto" />
+          <MailCheck className="h-16 w-16 text-blue-600 mx-auto" />
           <COMP.CardTitle className="text-2xl font-bold">
             Email Verification Sent
           </COMP.CardTitle>
@@ -87,7 +88,7 @@ const EmailVerificationSent = () => {
 
           <COMP.Button
             onClick={confirmVerification}
-            className="w-full bg-purple-600 hover:bg-purple-700"
+            className="w-full bg-blue-600 hover:bg-blue-700"
             disabled={loading}
           >
             {loading ? (
@@ -104,7 +105,7 @@ const EmailVerificationSent = () => {
             Didn't receive an email? Check your spam folder or{" "}
             <COMP.Button
               variant="link"
-              className="text-purple-600 hover:underline p-0 h-auto font-normal"
+              className="text-blue-600 hover:underline p-0 h-auto font-normal"
               onClick={() => triggerFetch("/resend-verification", {}, true)}
               disabled={loading}
             >

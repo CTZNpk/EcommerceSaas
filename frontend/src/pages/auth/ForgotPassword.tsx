@@ -76,7 +76,7 @@ const ForgotPasswordForm = () => {
             </COMP.Button>
             <COMP.Button
               onClick={() => (window.location.href = "/login")}
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-blue-600 hover:bg-blue-700"
             >
               Return to Login
             </COMP.Button>
@@ -110,7 +110,7 @@ const ForgotPasswordForm = () => {
 
         <COMP.Button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700"
+          className="w-full bg-blue-600 hover:bg-blue-700"
           disabled={loading}
         >
           {loading ? (
@@ -127,7 +127,7 @@ const ForgotPasswordForm = () => {
           <button
             type="button"
             onClick={() => (window.location.href = "/login")}
-            className="text-sm text-purple-600 hover:text-purple-700 hover:underline"
+            className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
           >
             Back to Login
           </button>
@@ -139,13 +139,13 @@ const ForgotPasswordForm = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gradient-to-br 
-      from-purple-100 via-purple-200 to-purple-300 dark:from-gray-700 dark:via-gray-800 
+      from-blue-100 via-blue-200 to-blue-300 dark:from-gray-700 dark:via-gray-800 
       dark:to-gray-900 p-4"
     >
       <COMP.Card className="w-full max-w-md border-0 shadow-2xl">
         <COMP.CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
-            <Mail className="h-12 w-12 text-purple-600" />
+            <Mail className="h-12 w-12 text-blue-600" />
           </div>
           <COMP.CardTitle className="text-2xl font-bold text-center">
             {success ? "Email Sent!" : "Forgot Password"}
