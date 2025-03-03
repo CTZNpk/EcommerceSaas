@@ -47,7 +47,8 @@ class ProfileController {
         res.status(400).json({ message: "No image provided" });
         return;
       }
-      const result = uploadImageToCloudinary("profile-pic", multerReq);
+      const result = await uploadImageToCloudinary("profile-pic", multerReq);
+      console.log(result);
 
       res.status(200).json({
         message: "Image uploaded successfully",

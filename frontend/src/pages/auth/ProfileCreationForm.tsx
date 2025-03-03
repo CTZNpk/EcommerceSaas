@@ -45,7 +45,7 @@ const ProfileCreationForm = () => {
       }
 
       const urlData = await triggerFetch(
-        "/users/upload",
+        "/user/upload",
         {
           method: "POST",
           body: formData,
@@ -58,7 +58,7 @@ const ProfileCreationForm = () => {
 
       data.imageUrl = url;
       const responseData = await triggerFetch(
-        "/users/update",
+        "/user/update",
         {
           method: "POST",
           body: JSON.stringify(data),

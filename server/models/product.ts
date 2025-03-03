@@ -22,7 +22,7 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
-    catgory: {
+    category: {
       type: String,
       required: true,
     },

@@ -1,5 +1,6 @@
 import VendorController from "@controllers/vendorController";
 import { auth, isVendor } from "@middlewares/auth";
+import { upload } from "config/multerConfig";
 import express, { Request, Response } from "express";
 
 const vendorRouter = express.Router();
@@ -20,6 +21,7 @@ vendorRouter.post(
   "/upload-product-pic",
   auth,
   isVendor,
+  upload.single("image"),
   VendorController.uploadProductPic,
 );
 

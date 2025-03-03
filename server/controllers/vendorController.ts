@@ -36,11 +36,12 @@ class VendorController {
   static async uploadProductPic(req: Request, res: Response) {
     try {
       const multerReq = req as MulterRequest;
+
       if (!multerReq.file) {
         res.status(400).json({ message: "No image provided" });
         return;
       }
-      const result = uploadImageToCloudinary("product-image", multerReq);
+      const result = await uploadImageToCloudinary("product-image", multerReq);
 
       res.status(200).json({
         message: "Image uploaded successfully",

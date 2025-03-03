@@ -3,7 +3,7 @@ import { useUserStore } from "@/store/userStore";
 import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "@/hooks/useFetch";
-import LoadingScreen from "@/pages/Loading";
+import LoadingScreen from "@/pages/auth/Loading";
 
 export function UserProtectedRoute({ children }: { children: ReactNode }) {
   const { user } = useUserStore();
