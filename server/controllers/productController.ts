@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 export class ProductController {
   static async getProductById(req: Request, res: Response) {
     try {
-      const { productId } = req.body();
+      const productId = req.params.productId;
 
       const product = await Product.findById(productId);
       if (!product || !product.isActive) {

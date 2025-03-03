@@ -20,6 +20,8 @@ import VendorAnalytics from "./pages/vendor/VendorAnalytics";
 import VendorChatSupport from "./pages/vendor/VendorChatSupport";
 import VendorSettings from "./pages/vendor/VendorSettings";
 import CreateProduct from "./pages/vendor/CreateProduct";
+import ViewProduct from "./pages/vendor/ViewProductScreen";
+import VendorProductView from "./pages/vendor/ViewProductScreen";
 
 function App() {
   return (
@@ -46,6 +48,7 @@ function App() {
         <Route path="/vendor/chat" element={<VendorChatSupport />} />
         <Route path="/vendor/settings" element={<VendorSettings />} />
         <Route path="/vendor/products/new" element={<CreateProduct />} />
+        <Route path="/product/:productId" element={<VendorProductView />} />
       </Routes>
     </Router>
   );

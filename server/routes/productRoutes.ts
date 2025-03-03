@@ -4,6 +4,6 @@ import express from "express";
 
 const productRouter = express.Router();
 
-productRouter.post("/get-product", auth, ProductController.getProductById);
+productRouter.get("/:productId", auth, ProductController.getProductById);
 
 export default productRouter;

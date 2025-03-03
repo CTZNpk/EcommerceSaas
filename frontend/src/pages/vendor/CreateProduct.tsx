@@ -34,9 +34,7 @@ export default function CreateProduct() {
   const { error, loading, triggerFetch } = useFetch();
 
   const onSubmit = async (data: ProductFormValues) => {
-    console.log("WE ARE HERE");
     try {
-      console.log("WE ENTERED HERE");
       const formData = new FormData();
 
       if (imageFile) formData.append("image", imageFile);
@@ -52,9 +50,7 @@ export default function CreateProduct() {
       );
 
       const url = imageData.imageUrl;
-      console.log("WE ENTERED HERE");
       data.image = url;
-
 
       await triggerFetch(
         "/vendor/add-product",
@@ -66,7 +62,7 @@ export default function CreateProduct() {
         true,
       );
 
-      navigate("/vendor-dashboard");
+      navigate("/vendor/dashboard");
     } catch (e) {
       console.error("Error submitting form:", e);
     }

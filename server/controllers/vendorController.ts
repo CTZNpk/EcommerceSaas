@@ -57,12 +57,12 @@ class VendorController {
 
   static async updateProduct(req: CustomRequest, res: Response) {
     try {
-      const { productId, productName, image, description, price } = req.body;
+      const { id, name, image, description, price, stock } = req.body;
       const userId = req.userId;
 
-      const existingProduct = await Product.findById(productId);
+      const existingProduct = await Product.findById(id);
       if (!existingProduct) {
-        res.status(404).json({ message: "User does not exist" });
+        res.status(404).json({ message: "Product does not exist" });
         return;
       }
       if (existingProduct.vendor.toString() != userId) {
@@ -72,10 +72,11 @@ class VendorController {
         return;
       }
 
-      existingProduct.name = productName || existingProduct.name;
+      existingProduct.name = name || existingProduct.name;
       existingProduct.image = image || existingProduct.image;
       existingProduct.description = description || existingProduct.description;
       existingProduct.price = price || existingProduct.price;
+      existingProduct.stock = stock || existingProduct.stock;
       await existingProduct.save();
 
       res.status(200).json({
@@ -94,7 +95,7 @@ class VendorController {
     try {
       const userId = req.userId;
 
-      const products = await Product.find({ vendor: userId });
+      const products = await Product.find({ vendor: userId, isActive: true });
 
       res.status(200).json({
         message: "Products Retrieved Successfully",
@@ -104,6 +105,32 @@ class VendorController {
       });
     } catch (error) {
       console.error("Profile update error:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
+  static async deleteProduct(req: CustomRequest, res: Response) {
+    try {
+      const userId = req.userId;
+      const productId = req.params.productId;
+
+      const product = await Product.findOneAndUpdate(
+        { _id: productId, vendor: userId },
+        { isActive: false },
+        { new: true },
+      );
+
+      if (!product) {
+        res.status(404).json({ message: "Product not found or unauthorized" });
+        return;
+      }
+
+      res.status(200).json({
+        message: "Product deleted successfully",
+        data: product,
+      });
+    } catch (error) {
+      console.error("Delete product error:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }

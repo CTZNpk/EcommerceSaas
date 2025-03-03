@@ -2,19 +2,37 @@ import { VendorLayout } from "@/components/VendorLayout";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Eye, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useFetch from "@/hooks/useFetch";
 
 export default function VendorProducts() {
   const navigate = useNavigate();
-  const [loading, _] = useState(false);
-  const [products, setProducts] = useState([
-    { id: 1, name: "Product A", price: "$50", stock: 10 },
-    { id: 2, name: "Product B", price: "$30", stock: 5 },
-  ]);
+  const [products, setProducts] = useState<any[]>([]);
+  const { loading, triggerFetch } = useFetch();
 
-  const handleDelete = (id: number) => {
-    setProducts((prev) => prev.filter((product) => product.id !== id));
-  };
+  async function handleDelete(productId: string) {
+    await triggerFetch(
+      `/vendor/delete-product/${productId}`,
+      {
+        method: "DELETE",
+      },
+      true,
+    );
+  }
+
+  useEffect(() => {
+    const getMyProducts = async () => {
+      const result = await triggerFetch(
+        "/vendor/get-all-products",
+        {
+          method: "GET",
+        },
+        true,
+      );
+      setProducts(result.products);
+    };
+    getMyProducts();
+  }, []);
 
   return (
     <VendorLayout>
@@ -40,7 +58,7 @@ export default function VendorProducts() {
             <ul className="divide-y divide-gray-200">
               {products.map((product) => (
                 <li
-                  key={product.id}
+                  key={product._id}
                   className="p-4 flex justify-between items-center"
                 >
                   <div>
@@ -51,13 +69,13 @@ export default function VendorProducts() {
                   </div>
                   <div className="flex space-x-3">
                     <button
-                      onClick={() => navigate(`/vendor/products/${product.id}`)}
+                      onClick={() => navigate(`/product/${product._id}`)}
                       className="text-blue-600 hover:text-blue-800"
                     >
                       <Eye className="w-5 h-5" />
                     </button>
                     <button
-                      onClick={() => handleDelete(product.id)}
+                      onClick={() => handleDelete(product._id)}
                       className="text-red-600 hover:text-red-800"
                     >
                       <Trash2 className="w-5 h-5" />

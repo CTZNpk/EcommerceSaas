@@ -48,7 +48,6 @@ class ProfileController {
         return;
       }
       const result = await uploadImageToCloudinary("profile-pic", multerReq);
-      console.log(result);
 
       res.status(200).json({
         message: "Image uploaded successfully",

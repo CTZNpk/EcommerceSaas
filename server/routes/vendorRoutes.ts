@@ -32,4 +32,11 @@ vendorRouter.post(
   VendorController.updateProduct,
 );
 
+vendorRouter.delete(
+  "/delete-product/:productId",
+  auth,
+  isVendor,
+  VendorController.deleteProduct,
+);
+
 export default vendorRouter;
