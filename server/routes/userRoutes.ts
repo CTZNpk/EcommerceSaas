@@ -13,7 +13,7 @@ userRouter.post(
   "/upload",
   auth,
   upload.single("image"),
-  ProfileController.uploadImage,
+  ProfileController.uploadProfilePic,
 );
 
 export default userRouter;

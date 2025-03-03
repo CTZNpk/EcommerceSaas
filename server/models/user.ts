@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IProduct } from "./product";
 
 export enum AccountType {
   USER = "user",
@@ -22,6 +23,7 @@ export interface IUser extends Document {
   address: string;
   phoneNumber: string;
   verificationToken: string | null;
+  products: IProduct;
   status: UserStatus;
 }
 
@@ -56,6 +58,12 @@ const userSchema = new Schema(
       enum: Object.values(UserStatus),
       default: UserStatus.UNVERIFIED,
     },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     //TODO Total Spent
     //TODO Total Sold for vendor?
     verificationToken: { type: String },

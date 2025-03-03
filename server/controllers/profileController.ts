@@ -1,13 +1,8 @@
 import { CustomRequest } from "@middlewares/auth";
 import User from "@models/user";
 import { Response, Request } from "express";
-import fs from "fs";
-import { v2 as cloudinary } from "cloudinary";
-
-interface MulterRequest extends Request {
-  userId?: string;
-  file?: Express.Multer.File;
-}
+import { uploadImageToCloudinary } from "@services/uploadImage";
+import { MulterRequest } from "@services/uploadImage";
 
 class ProfileController {
   static async updateProfile(req: CustomRequest, res: Response) {
@@ -45,24 +40,19 @@ class ProfileController {
     }
   }
 
-  static async uploadImage(req: Request, res: Response) {
+  static async uploadProfilePic(req: Request, res: Response) {
     try {
       const multerReq = req as MulterRequest;
       if (!multerReq.file) {
         res.status(400).json({ message: "No image provided" });
         return;
       }
-
-      const result = await cloudinary.uploader.upload(multerReq.file.path, {
-        folder: "your-folder",
-      });
-
-      fs.unlinkSync(multerReq.file.path);
+      const result = uploadImageToCloudinary("profile-pic", multerReq);
 
       res.status(200).json({
         message: "Image uploaded successfully",
         data: {
-          imageUrl: result.secure_url,
+          imageUrl: result,
         },
       });
     } catch (error) {
