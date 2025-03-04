@@ -25,4 +25,26 @@ export class ProductController {
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
+
+  static async getProducts(_: Request, res: Response) {
+    try {
+      const products = await Product.find({ isActive: true });
+      if (!products) {
+        res.status(404).json({
+          message: "No Products Found",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        message: "Products Retrieved Successfully",
+        data: {
+          products,
+        },
+      });
+    } catch (error) {
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
 }
