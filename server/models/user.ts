@@ -23,7 +23,7 @@ export interface IUser extends Document {
   address: string;
   phoneNumber: string;
   verificationToken: string | null;
-  products: IProduct;
+  products: IProduct[];
   status: UserStatus;
 }
 
