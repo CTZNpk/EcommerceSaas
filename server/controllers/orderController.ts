@@ -16,7 +16,8 @@ export class OrderController {
         !Array.isArray(products) ||
         products.length === 0
       ) {
-        return res.status(400).json({ message: "Invalid order details" });
+        res.status(400).json({ message: "Invalid order details" });
+        return;
       }
 
       const productDetails = await Promise.all(
@@ -70,7 +71,8 @@ export class OrderController {
       const { userId } = req.params;
 
       if (!userId) {
-        return res.status(400).json({ message: "User ID is required" });
+        res.status(400).json({ message: "User ID is required" });
+        return;
       }
 
       const orders = await Order.find({ buyer: userId })
@@ -78,9 +80,8 @@ export class OrderController {
         .sort({ createdAt: -1 });
 
       if (!orders.length) {
-        return res
-          .status(404)
-          .json({ message: "No orders found for this user" });
+        res.status(404).json({ message: "No orders found for this user" });
+        return;
       }
 
       res.status(200).json({ orders });
@@ -95,7 +96,8 @@ export class OrderController {
       const { vendorId } = req.params;
 
       if (!vendorId) {
-        return res.status(400).json({ message: "Vendor ID is required" });
+        res.status(400).json({ message: "Vendor ID is required" });
+        return;
       }
 
       const vendorProducts = await Product.find({ vendor: vendorId }).select(
@@ -103,9 +105,8 @@ export class OrderController {
       );
 
       if (!vendorProducts.length) {
-        return res
-          .status(404)
-          .json({ message: "No products found for this vendor" });
+        res.status(404).json({ message: "No products found for this vendor" });
+        return;
       }
 
       const productIds = vendorProducts.map((p) => p._id);
@@ -150,10 +151,10 @@ export class OrderController {
         .populate("buyer", "name email")
         .populate("products.product", "name price");
 
-      return res.status(200).json({ success: true, orders });
+      res.status(200).json({ success: true, orders });
     } catch (error) {
       console.error("Error fetching admin orders:", error);
-      return res
+      res
         .status(500)
         .json({ success: false, message: "Internal Server Error" });
     }
@@ -166,39 +167,38 @@ export class OrderController {
       const order = await Order.findById(orderId);
 
       if (!order) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Order not found" });
+        res.status(404).json({ success: false, message: "Order not found" });
+        return;
       }
 
       if (
         order.buyer.toString() !== userId &&
         req.accountType !== AccountType.ADMIN
       ) {
-        return res
-          .status(403)
-          .json({ success: false, message: "Unauthorized" });
+        res.status(403).json({ success: false, message: "Unauthorized" });
+        return;
       }
 
       if (
         order.orderStatus === OrderStatus.SHIPPED ||
         order.orderStatus === OrderStatus.DELIVERED
       ) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: "Order cannot be canceled at this stage",
         });
+        return;
       }
 
       order.orderStatus = OrderStatus.CANCELED;
       await order.save();
 
-      return res
+      res
         .status(200)
         .json({ success: true, message: "Order canceled successfully", order });
     } catch (error) {
       console.error("Error canceling order:", error);
-      return res
+      res
         .status(500)
         .json({ success: false, message: "Internal Server Error" });
     }

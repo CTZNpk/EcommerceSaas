@@ -28,18 +28,22 @@ export class ProductController {
 
   static async getProducts(_: Request, res: Response) {
     try {
-      const products = await Product.find({ isActive: true });
+      const products = await Product.find({ isActive: true }).lean();
       if (!products) {
         res.status(404).json({
           message: "No Products Found",
         });
         return;
       }
+      const formattedProducts = products.map(({ _id, ...rest }) => ({
+        id: _id.toString(),
+        ...rest,
+      }));
 
       res.status(200).json({
         message: "Products Retrieved Successfully",
         data: {
-          products,
+          products: formattedProducts,
         },
       });
     } catch (error) {

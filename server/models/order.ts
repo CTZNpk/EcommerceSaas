@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IProduct } from "./product";
 
 export enum PaymentStatus {
-  PAID = "paid",
+  CardPayment = "cardpayment",
   CASH_ON_DELIVERY = "cash_on_delivery",
-  UNPAID = "unpaid",
 }
 
 export enum OrderStatus {
@@ -15,10 +15,10 @@ export enum OrderStatus {
 }
 
 export interface IOrderItem {
-  product: Schema.Types.ObjectId;
+  product: Schema.Types.ObjectId | IProduct;
   quantity: number;
-  price: number; // Price at the time of order
-  subtotal: number; // quantity * price
+  price: number;
+  subtotal: number;
 }
 
 export interface IOrder extends Document {
@@ -69,7 +69,7 @@ const orderSchema = new Schema<IOrder>(
     paymentStatus: {
       type: String,
       enum: Object.values(PaymentStatus),
-      default: PaymentStatus.UNPAID,
+      required: true,
     },
     orderStatus: {
       type: String,
