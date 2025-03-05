@@ -7,7 +7,14 @@ import { ObjectId } from "mongoose";
 export class OrderController {
   static async createOrder(req: CustomRequest, res: Response) {
     try {
-      const { products, paymentStatus } = req.body;
+      const { paymentStatus } = req.body;
+
+      type Product = {
+        id: number;
+        quantity: number;
+      };
+      const products: Product[] = req.body.products;
+
       const buyer = req.userId;
 
       if (
@@ -21,17 +28,18 @@ export class OrderController {
       }
 
       const productDetails = await Promise.all(
-        products.map(async (item: IOrderItem) => {
-          const product = await Product.findById(item.product);
+        products.map(async (item: Product) => {
+          const product = await Product.findById(item.id);
           if (!product) {
-            throw new Error(`Product with ID ${item.product} not found`);
+            // This error will be caught by the outer try/catch
+            throw new Error(`Product with ID ${item.id} not found`);
           }
           if (product.stock < item.quantity) {
             throw new Error(`Insufficient stock for ${product.name}`);
           }
           return {
-            ...item,
-            price: product.price,
+            product: product,
+            quantity: item.quantity,
             subtotal: product.price * item.quantity,
           };
         }),
@@ -46,7 +54,7 @@ export class OrderController {
         buyer,
         products: productDetails,
         totalAmount,
-        paymentStatus: paymentStatus,
+        paymentStatus,
         orderStatus: OrderStatus.PENDING,
       });
 
@@ -54,21 +62,23 @@ export class OrderController {
 
       await Promise.all(
         products.map(async (item) => {
-          await Product.findByIdAndUpdate(item.product, {
+          await Product.findByIdAndUpdate(item.id, {
             $inc: { stock: -item.quantity },
           });
         }),
       );
 
-      res.status(201).json({ message: "Order created successfully", order });
+      res
+        .status(201)
+        .json({ message: "Order created successfully", data: { order } });
     } catch (error) {
       console.log("Error ", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
-  static async getUsersOrders(req: Request, res: Response) {
+  static async getUsersOrders(req: CustomRequest, res: Response) {
     try {
-      const { userId } = req.params;
+      const userId = req.userId;
 
       if (!userId) {
         res.status(400).json({ message: "User ID is required" });
@@ -84,7 +94,7 @@ export class OrderController {
         return;
       }
 
-      res.status(200).json({ orders });
+      res.status(200).json({ data: { orders } });
     } catch (error) {
       console.log("Error :", error);
       res.status(500).json({ message: "Internal Server Error" });

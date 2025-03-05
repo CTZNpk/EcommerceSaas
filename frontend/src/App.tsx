@@ -23,6 +23,7 @@ import CreateProduct from "./pages/vendor/CreateProduct";
 import VendorProductView from "./pages/vendor/ViewProductScreen";
 import MainPage from "./pages/user/MainPage";
 import ViewCartPage from "./pages/user/ViewCartPage";
+import ViewOrdersPage from "./pages/user/ViewOrdersPage";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
         <Route path="/product/:productId" element={<VendorProductView />} />
         <Route path="/user/main" element={<MainPage />} />
         <Route path="/user/cart" element={<ViewCartPage />} />
+        <Route path="/user/order" element={<ViewOrdersPage />} />
       </Routes>
     </Router>
   );

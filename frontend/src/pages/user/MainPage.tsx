@@ -28,7 +28,13 @@ export default function CustomerMainPage() {
 
   useEffect(() => {
     const getProducts = async () => {
-      const data = await triggerFetch("/product/", { method: "GET" }, true);
+      const data = await triggerFetch(
+        "/product/",
+        {
+          method: "GET",
+        },
+        true,
+      );
       setItems(data.products);
     };
     getProducts();

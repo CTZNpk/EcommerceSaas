@@ -51,10 +51,6 @@ const orderSchema = new Schema<IOrder>(
           required: true,
           min: 1,
         },
-        price: {
-          type: Number,
-          required: true,
-        },
         subtotal: {
           type: Number,
           required: true,

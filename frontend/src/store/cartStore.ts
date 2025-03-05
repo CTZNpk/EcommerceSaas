@@ -7,6 +7,7 @@ interface CartItem {
   price: number;
   image: string;
   quantity: number;
+  stock: number;
 }
 
 interface CartState {
@@ -14,7 +15,8 @@ interface CartState {
   totalPrice: number;
   addToCart: (product: CartItem) => void;
   removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  incrementQuantity: (id: string) => void;
+  decrementQuantity: (id: string) => void;
   clearCart: () => void;
 }
 
@@ -34,7 +36,10 @@ export const useCartStore = create<CartState>()(
           if (existingItem) {
             updatedCart = state.cart.map((item) =>
               item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
+                ? {
+                    ...item,
+                    quantity: Math.min(item.quantity + 1, product.stock),
+                  }
                 : item,
             );
           } else {
@@ -52,11 +57,26 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      updateQuantity: (id, quantity) => {
+      incrementQuantity: (id) => {
         set((state) => {
           const updatedCart = state.cart.map((item) =>
-            item.id === id ? { ...item, quantity } : item,
+            item.id === id
+              ? { ...item, quantity: Math.min(item.quantity + 1, item.stock) }
+              : item,
           );
+          return { cart: updatedCart, totalPrice: calculateTotal(updatedCart) };
+        });
+      },
+
+      decrementQuantity: (id) => {
+        set((state) => {
+          const updatedCart = state.cart
+            .map((item) =>
+              item.id === id
+                ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
+                : item,
+            )
+            .filter((item) => item.quantity > 0);
           return { cart: updatedCart, totalPrice: calculateTotal(updatedCart) };
         });
       },
