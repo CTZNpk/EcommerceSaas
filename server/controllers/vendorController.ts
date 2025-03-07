@@ -2,6 +2,8 @@ import { CustomRequest } from "@middlewares/auth";
 import Product, { IProduct } from "@models/product";
 import { MulterRequest, uploadImageToCloudinary } from "@services/uploadImage";
 import { Response, Request } from "express";
+import axios from "axios";
+import { ENV } from "config/env";
 
 class VendorController {
   static async addProduct(req: CustomRequest, res: Response) {
@@ -10,6 +12,7 @@ class VendorController {
         req.body;
       const userId = req.userId;
 
+      // Create and save the product in MongoDB
       const newProduct: IProduct = new Product({
         name: productName,
         image,
@@ -21,18 +24,30 @@ class VendorController {
       });
 
       const createdProduct = await newProduct.save();
+
+      // Call FastAPI to generate embedding
+      try {
+        await axios.post(`${ENV.FAST_API}/generate_embedding`, {
+          id: createdProduct._id, // MongoDB Product ID
+          productName,
+          description,
+          category,
+        });
+      } catch (apiError) {
+        console.error("Embedding API Error:", apiError);
+      }
+
       res.status(201).json({
-        message: "Product Created Succesfully",
+        message: "Product Created Successfully",
         data: {
           createdProduct,
         },
       });
     } catch (error) {
-      console.log("Registration error:", error);
+      console.log("Product creation error:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
-
   static async uploadProductPic(req: Request, res: Response) {
     try {
       const multerReq = req as MulterRequest;
@@ -78,6 +93,18 @@ class VendorController {
       existingProduct.price = price || existingProduct.price;
       existingProduct.stock = stock || existingProduct.stock;
       await existingProduct.save();
+      await fetch(`${ENV.FAST_API}/update_embedding/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          productName: existingProduct.name,
+          description: existingProduct.description,
+          category: existingProduct.category,
+        }),
+      });
 
       res.status(200).json({
         message: "User updated successfully",
@@ -124,6 +151,13 @@ class VendorController {
         res.status(404).json({ message: "Product not found or unauthorized" });
         return;
       }
+
+      await fetch(`${ENV.FAST_API}/delete_embedding/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       res.status(200).json({
         message: "Product deleted successfully",

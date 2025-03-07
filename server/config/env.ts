@@ -18,7 +18,7 @@ export const ENV = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
   //TODO MAKE THREE JWT_SECRETS
   JWT_SECRET: process.env.JWT_SECRET as string,
-
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASS: process.env.EMAIL_PASS,
+  FAST_API: process.env.FAST_API_URL,
 };

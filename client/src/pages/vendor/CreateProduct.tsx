@@ -62,9 +62,11 @@ export default function CreateProduct() {
   };
 
   return (
-    <Background>
-      <div className="max-w-2xl w-xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-bold mb-4">Create New Product</h2>
+    <Background className="flex items-center justify-center">
+      <div className="max-w-2xl w-xl mx-auto bg-white p-6 rounded-lg shadow ">
+        <div className="flex items-center justify-center">
+          <h2 className="text-2xl font-bold mb-4 ">Create New Product</h2>
+        </div>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -130,7 +132,7 @@ export default function CreateProduct() {
 
           <COMP.Button
             type="submit"
-            className="w-full bg-blue-600 text-white"
+            className="w-full bg-prim hover:bg-hover text-white"
             disabled={loading}
           >
             {loading ? "Creating..." : "Create Product"}
