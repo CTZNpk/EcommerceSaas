@@ -12,7 +12,6 @@ class VendorController {
         req.body;
       const userId = req.userId;
 
-      // Create and save the product in MongoDB
       const newProduct: IProduct = new Product({
         name: productName,
         image,
@@ -25,7 +24,6 @@ class VendorController {
 
       const createdProduct = await newProduct.save();
 
-      // Call FastAPI to generate embedding
       try {
         await axios.post(`${ENV.FAST_API}/generate_embedding`, {
           id: createdProduct._id, // MongoDB Product ID

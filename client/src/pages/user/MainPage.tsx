@@ -16,17 +16,26 @@ export default function CustomerMainPage() {
 
   useEffect(() => {
     const getProducts = async () => {
-      const data = await triggerFetch(
-        "/product/",
-        {
-          method: "GET",
-        },
-        true,
-      );
+      const data =
+        searchQuery == ""
+          ? await triggerFetch(
+            "/product/",
+            {
+              method: "GET",
+            },
+            true,
+          )
+          : await triggerFetch(
+            `/product/search?query=${searchQuery}&top_k=2`,
+            {
+              method: "GET",
+            },
+            true,
+          );
       setItems(data.products);
     };
     getProducts();
-  }, []);
+  }, [searchQuery]);
 
   const navigateToCartScreen = () => {
     navigate("/user/cart");

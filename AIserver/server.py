@@ -53,9 +53,6 @@ def generate_embedding(product: Product):
     faiss_index = index.ntotal - 1  # Get the last inserted index
     product_store[faiss_index] = {
         "id": product.id,  # Store MongoDB Product ID
-        "name": product.productName,
-        "description": product.description,
-        "category": product.category,
     }
 
     # **Save FAISS index to disk**
@@ -82,13 +79,7 @@ def search_product(query: str, top_k: int = 5):
         with open(PRODUCT_METADATA_PATH, "rb") as f:
             product_store = json.load(f)
     results = [
-        {
-            "id": product_store[str(i)]["id"],  # MongoDB Product ID
-            "productName": product_store[str(i)]["name"],
-            "description": product_store[str(i)]["description"],
-            "category": product_store[str(i)]["category"],
-            "distance": float(distances[0][j]),
-        }
+        {product_store[str(i)]["id"]}
         for j, i in enumerate(indices[0])
         if str(i) in product_store
     ]
@@ -143,24 +134,31 @@ def delete_embedding(product_id: str):
     for idx, data in product_store.items():
         if data["id"] == product_id:
             faiss_index = int(idx)  # Convert back to integer
+            break  # Stop once found
 
     if faiss_index is None:
         return {"message": "Product not found in embeddings"}
 
-    # **Remove embedding from FAISS (Rebuild index)**
+    # **Remove metadata from dictionary**
+    del product_store[str(faiss_index)]  # Delete metadata first
+
+    # **Rebuild FAISS index**
     new_index = faiss.IndexFlatL2(embedding_dim)
     new_product_store = {}
 
-    for i in range(index.ntotal):
-        if i != faiss_index:
+    new_idx = 0  # New FAISS index counter
+    for old_idx in range(index.ntotal):
+        if old_idx != faiss_index:
             vec = np.zeros((1, embedding_dim), dtype=np.float32)
-            index.reconstruct(i, vec)
+            index.reconstruct(old_idx, vec)
             new_index.add(vec)
-            new_product_store[str(len(new_product_store))
-                              ] = product_store[str(i)]
+            new_product_store[str(new_idx)] = product_store.get(
+                str(old_idx), {}
+            )  # Shift metadata
+            new_idx += 1
 
     index = new_index  # Replace with new FAISS index
-    product_store = new_product_store  # Replace metadata
+    product_store = new_product_store  # Update metadata
 
     # **Save FAISS index to disk**
     faiss.write_index(index, FAISS_INDEX_PATH)
@@ -169,4 +167,4 @@ def delete_embedding(product_id: str):
     with open(PRODUCT_METADATA_PATH, "w") as f:
         json.dump(product_store, f)
 
-    return {"message": "Embedding deleted successfully"}
+    return {"message": "Embedding and metadata deleted successfully"}

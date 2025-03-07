@@ -1,4 +1,7 @@
+import { CustomRequest } from "@middlewares/auth";
 import Product from "@models/product";
+import axios from "axios";
+import { ENV } from "config/env";
 import { Request, Response } from "express";
 
 export class ProductController {
@@ -23,6 +26,40 @@ export class ProductController {
     } catch (error) {
       console.error("Profile update error:", error);
       res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
+  static async searchProducts(req: CustomRequest, res: Response) {
+    try {
+      const { query, top_k } = req.query;
+
+      if (!query) {
+        res.status(400).json({ message: "Query is required" });
+        return;
+      }
+
+      const fastApiResponse = await axios.get(`${ENV.FAST_API}/search`, {
+        params: { query, top_k: top_k || 5 },
+      });
+
+      const productIds = fastApiResponse.data.results; // Assuming it's an array of product IDs
+
+      if (!productIds.length) {
+        res
+          .status(200)
+          .json({ message: "No products found", data: { products: [] } });
+        return;
+      }
+
+      const products = await Product.find({ _id: { $in: productIds } });
+
+      res.status(200).json({
+        message: "Search Request Successful",
+        data: { products },
+      });
+    } catch (error) {
+      console.error("Error searching products:", error);
+      res.status(500).json({ message: "Failed to fetch search results" });
     }
   }
 
