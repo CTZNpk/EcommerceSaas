@@ -20,10 +20,10 @@ import VendorAnalytics from "./pages/vendor/VendorAnalytics";
 import VendorChatSupport from "./pages/vendor/VendorChatSupport";
 import VendorSettings from "./pages/vendor/VendorSettings";
 import CreateProduct from "./pages/vendor/CreateProduct";
-import VendorProductView from "./pages/vendor/ViewProductScreen";
 import MainPage from "./pages/user/MainPage";
 import ViewCartPage from "./pages/user/ViewCartPage";
 import ViewOrdersPage from "./pages/user/ViewOrdersPage";
+import ProductView from "./pages/product/ProductView";
 
 function App() {
   return (
@@ -50,10 +50,10 @@ function App() {
         <Route path="/vendor/chat" element={<VendorChatSupport />} />
         <Route path="/vendor/settings" element={<VendorSettings />} />
         <Route path="/vendor/products/new" element={<CreateProduct />} />
-        <Route path="/product/:productId" element={<VendorProductView />} />
         <Route path="/user/main" element={<MainPage />} />
         <Route path="/user/cart" element={<ViewCartPage />} />
         <Route path="/user/order" element={<ViewOrdersPage />} />
+        <Route path="/product/:productId" element={<ProductView />} />
       </Routes>
     </Router>
   );

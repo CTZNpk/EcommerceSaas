@@ -10,4 +10,5 @@ export interface IProduct {
   ratingCount: number;
   purchaseCount: number;
   isActive: boolean;
+  vendor: string;
 }

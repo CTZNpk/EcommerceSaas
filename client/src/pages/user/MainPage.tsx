@@ -19,23 +19,27 @@ export default function CustomerMainPage() {
       const data =
         searchQuery == ""
           ? await triggerFetch(
-            "/product/",
-            {
-              method: "GET",
-            },
-            true,
-          )
+              "/product/",
+              {
+                method: "GET",
+              },
+              true,
+            )
           : await triggerFetch(
-            `/product/search?query=${searchQuery}&top_k=2`,
-            {
-              method: "GET",
-            },
-            true,
-          );
+              `/product/search?query=${searchQuery}&top_k=2`,
+              {
+                method: "GET",
+              },
+              true,
+            );
       setItems(data.products);
     };
     getProducts();
   }, [searchQuery]);
+
+  const navigateToViewProductScreen = (id: string) => {
+    navigate(`/product/${id}`);
+  };
 
   const navigateToCartScreen = () => {
     navigate("/user/cart");
@@ -84,12 +88,13 @@ export default function CustomerMainPage() {
               <COMP.Card
                 key={product.id}
                 className="shadow-xl border border-gray-200 rounded-lg"
+                onClick={() => navigateToViewProductScreen(product.id)}
               >
                 <COMP.CardHeader>
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-40 object-cover rounded-md"
+                    className="w-full h-40 object-fill rounded-md"
                   />
                 </COMP.CardHeader>
                 <COMP.CardContent className="space-y-2 text-center">
