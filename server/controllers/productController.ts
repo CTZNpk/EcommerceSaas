@@ -1,8 +1,9 @@
 import { CustomRequest } from "@middlewares/auth";
-import Product from "@models/product";
+import Product, { IProduct } from "@models/product";
 import axios from "axios";
 import { ENV } from "config/env";
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 
 export class ProductController {
   static async getProductById(req: Request, res: Response) {
@@ -44,6 +45,7 @@ export class ProductController {
 
       const productIds = fastApiResponse.data.results; // Assuming it's an array of product IDs
 
+
       if (!productIds.length) {
         res
           .status(200)
@@ -53,9 +55,14 @@ export class ProductController {
 
       const products = await Product.find({ _id: { $in: productIds } });
 
+      const orderedProducts = productIds.map((id: string) =>
+        products.find(
+          (product: any) => product._id.toString() === id[0] || null,
+        ),
+      );
       res.status(200).json({
         message: "Search Request Successful",
-        data: { products },
+        data: { products: orderedProducts },
       });
     } catch (error) {
       console.error("Error searching products:", error);

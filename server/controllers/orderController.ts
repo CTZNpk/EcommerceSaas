@@ -89,10 +89,10 @@ export class OrderController {
         .populate("products.product")
         .sort({ createdAt: -1 });
 
-      if (!orders.length) {
-        res.status(404).json({ message: "No orders found for this user" });
-        return;
-      }
+      // if (!orders.length) {
+      //   res.status(404).json({ message: "No orders found for this user" });
+      //   return;
+      // }
 
       res.status(200).json({ data: { orders } });
     } catch (error) {
