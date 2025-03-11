@@ -21,4 +21,5 @@ export const ENV = {
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASS: process.env.EMAIL_PASS,
   FAST_API: process.env.FAST_API_URL,
+  STRIPE_KEY: process.env.STRIPE_KEY as string,
 };

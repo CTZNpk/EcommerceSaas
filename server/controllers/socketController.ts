@@ -18,12 +18,9 @@ class SocketController {
 
       socket.on("joinRoom", async ({ user1, user2 }) => {
         const roomId = [user1.userId, user2.userId].sort().join("_");
-        console.log(roomId);
 
         let room = await Room.findOne({ roomId });
 
-        console.log(user1);
-        console.log(user2);
         if (!room) {
           room = new Room({
             roomId,

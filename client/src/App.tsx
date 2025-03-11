@@ -26,6 +26,7 @@ import ViewOrdersPage from "./pages/user/ViewOrdersPage";
 import ProductView from "./pages/product/ProductView";
 import RoomsPage from "./pages/chat/RoomsPage";
 import ChatScreen from "./pages/chat/ChatScreen";
+import StripePaymentScreen from "./pages/stripe/CheckoutForm";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
         <Route path="/product/:productId" element={<ProductView />} />
         <Route path="/rooms/" element={<RoomsPage />} />
         <Route path="/chat/:otherUserId" element={<ChatScreen />} />
+        <Route path="/checkout" element={<StripePaymentScreen />} />
       </Routes>
     </Router>
   );
