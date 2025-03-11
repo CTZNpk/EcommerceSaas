@@ -16,8 +16,7 @@ class SocketController {
     this.io.on("connection", (socket: Socket) => {
       console.log("User connected:", socket.id);
 
-      // Handle direct messaging (create or join room)
-      socket.on("startChat", async ({ user1, user2 }) => {
+      socket.on("joinRoom", async ({ user1, user2 }) => {
         const roomId = [user1.userId, user2.userId].sort().join("_");
 
         let room = await Room.findOne({ roomId });
@@ -32,7 +31,6 @@ class SocketController {
         }
 
         socket.join(roomId);
-        console.log(`Room created/joined: ${roomId}`);
 
         // Send previous messages
         const messages = await Message.find({ roomId }).sort({ timestamp: 1 });

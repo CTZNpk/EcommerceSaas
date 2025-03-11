@@ -24,6 +24,7 @@ import MainPage from "./pages/user/MainPage";
 import ViewCartPage from "./pages/user/ViewCartPage";
 import ViewOrdersPage from "./pages/user/ViewOrdersPage";
 import ProductView from "./pages/product/ProductView";
+import RoomsPage from "./pages/chat/RoomsPage";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
         <Route path="/user/cart" element={<ViewCartPage />} />
         <Route path="/user/order" element={<ViewOrdersPage />} />
         <Route path="/product/:productId" element={<ProductView />} />
+        <Route path="/product/:productId" element={<ProductView />} />
+        <Route path="/rooms/" element={<RoomsPage />} />
       </Routes>
     </Router>
   );

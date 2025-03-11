@@ -6,6 +6,7 @@ import authRouter from "./authRoutes";
 import productRouter from "./productRoutes";
 import cartRouter from "./cartRoutes";
 import orderRouter from "./orderRoutes";
+import messageRouter from "./messageRoutes";
 
 const apiRouter = express.Router(); // Parent router
 
@@ -16,5 +17,6 @@ apiRouter.use("/admin", adminRouter);
 apiRouter.use("/product", productRouter);
 apiRouter.use("/cart", cartRouter);
 apiRouter.use("/order", orderRouter);
+apiRouter.use("/message", messageRouter);
 
 export default apiRouter;
