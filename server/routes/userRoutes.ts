@@ -16,4 +16,6 @@ userRouter.post(
   ProfileController.uploadProfilePic,
 );
 
+userRouter.get("/:userId", auth, ProfileController.getProfileFromId);
+
 export default userRouter;

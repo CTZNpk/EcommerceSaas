@@ -21,6 +21,7 @@ const RoomsPage = () => {
         },
         true,
       );
+
       setRooms(result);
     };
     fetchRooms();
@@ -103,14 +104,14 @@ const RoomsPage = () => {
                     const otherUser = room.users.find(
                       (tempUser) => tempUser.userId !== user?.id,
                     );
-                    const lastMessage = room.latestMessage;
+                    const lastMessage = room.lastMessage;
                     // const hasUnread = room.unreadCount > 0;
 
                     return (
                       <div
                         key={room.id}
                         className="flex items-center p-4 hover:bg-gray-50 cursor-pointer transition-colors"
-                        onClick={() => navigate(`/chat/${room.id}`)}
+                        onClick={() => navigate(`/chat/${otherUser?.userId}`)}
                       >
                         <div className="relative">
                           <img
@@ -145,7 +146,7 @@ const RoomsPage = () => {
   "text-gray-500"}`}
                             >
                               {lastMessage
-                                ? lastMessage.text
+                                ? lastMessage.message
                                 : "No messages yet"}
                             </p>
 

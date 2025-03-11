@@ -60,6 +60,33 @@ class ProfileController {
       res.status(500).json({ message: "Image upload failed" });
     }
   }
+
+  static async getProfileFromId(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      if (!userId) {
+        res.status(400).json({ message: "User ID is required" });
+        return;
+      }
+
+      const user = await User.findById(userId).select("username _id profilePic"); // Only fetch name, id, and profilePic
+
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      res
+        .status(200)
+        .json({ message: "Successfully Retrieved User", data: user });
+      return;
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+      return;
+    }
+  }
 }
 
 export default ProfileController;

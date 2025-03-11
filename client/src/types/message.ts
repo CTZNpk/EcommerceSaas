@@ -1,5 +1,5 @@
 export interface IMessage {
-  text: string;
+  message: string;
   sender: string;
   timestamp: string;
 }
@@ -13,5 +13,5 @@ interface User {
 export interface IRoom {
   id: string;
   users: User[];
-  latestMessage: IMessage;
+  lastMessage: IMessage;
 }

@@ -19,11 +19,11 @@ const useFetch = () => {
         ...options,
         headers: contentTypeApplication
           ? {
-            accept: "application/json",
-            "Content-Type": "application/json",
+              accept: "application/json",
+              "Content-Type": "application/json",
 
-            ...(options?.headers || {}),
-          }
+              ...(options?.headers || {}),
+            }
           : { ...(options?.headers || {}) },
         credentials: includeCookies ? "include" : "omit",
       };

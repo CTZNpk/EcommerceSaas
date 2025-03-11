@@ -93,7 +93,8 @@ export default function ProductView() {
 
   const handleContactVendor = () => {
     if (!product) return;
-    // Implement contact vendor logic
+
+    navigate(`/chat/${product.vendor}`);
   };
 
   const renderRatingStars = (rating: number) => {
@@ -103,11 +104,10 @@ export default function ProductView() {
           <Star
             key={index}
             size={16}
-            className={`${
-              index < Math.floor(rating)
+            className={`${index < Math.floor(rating)
                 ? "text-yellow-400 fill-yellow-400"
                 : "text-gray-300"
-            }`}
+              }`}
           />
         ))}
         <span className="ml-2 text-sm text-gray-600">{rating.toFixed(1)}</span>

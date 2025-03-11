@@ -25,6 +25,7 @@ import ViewCartPage from "./pages/user/ViewCartPage";
 import ViewOrdersPage from "./pages/user/ViewOrdersPage";
 import ProductView from "./pages/product/ProductView";
 import RoomsPage from "./pages/chat/RoomsPage";
+import ChatScreen from "./pages/chat/ChatScreen";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
         <Route path="/product/:productId" element={<ProductView />} />
         <Route path="/product/:productId" element={<ProductView />} />
         <Route path="/rooms/" element={<RoomsPage />} />
+        <Route path="/chat/:otherUserId" element={<ChatScreen />} />
       </Routes>
     </Router>
   );
