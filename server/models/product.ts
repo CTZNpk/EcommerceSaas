@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const productSchema = new Schema(
   {
-    itemName: {
+    name: {
       type: String,
       required: true,
     },
@@ -10,11 +10,23 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
     },
-    vendorId: {
+    stock: {
+      type: Number,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    vendor: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -45,13 +57,16 @@ const productSchema = new Schema(
 );
 
 export interface IProduct extends Document {
-  itemName: string;
+  name: string;
   image: string;
   price: number;
-  vendorId: Schema.Types.ObjectId;
+  description: string;
+  vendor: Schema.Types.ObjectId;
   rating: Number;
   ratingCount: number;
   purchaseCount: number;
+  stock: number;
+  category: string;
   isActive: boolean;
 }
 

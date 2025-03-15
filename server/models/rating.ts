@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const ratingSchema = new Schema(
   {
+    //TODO Reference
     userId: {
       type: String,
       required: true,

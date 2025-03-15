@@ -1,13 +1,39 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IProduct } from "./product";
+
+export enum AccountType {
+  USER = "user",
+  ADMIN = "admin",
+  VENDOR = "vendor",
+}
+
+export enum UserStatus {
+  VERIFIED = "verified",
+  UNVERIFIED = "unverified",
+  DELETED = "deleted",
+  BLOCKED = "blocked",
+}
+
+export interface IUser extends Document {
+  profilePic: string;
+  username: string;
+  accountType: AccountType;
+  email: string;
+  password: string;
+  address: string;
+  phoneNumber: string;
+  verificationToken: string | null;
+  products: IProduct[];
+  status: UserStatus;
+}
 
 const userSchema = new Schema(
   {
-    imageUrl: {
+    profilePic: {
       type: String,
     },
     username: {
       type: String,
-      required: true,
     },
     phoneNumber: {
       type: String,
@@ -17,8 +43,7 @@ const userSchema = new Schema(
     },
     accountType: {
       type: String,
-      enum: ["admin", "user", "vendor"],
-      default: "user",
+      enum: Object.values(AccountType),
     },
     email: {
       type: String,
@@ -27,36 +52,26 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      enum: Object.values(UserStatus),
+      default: UserStatus.UNVERIFIED,
     },
-
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    //TODO Total Spent
+    //TODO Total Sold for vendor?
     verificationToken: { type: String },
   },
   {
     timestamps: true,
   },
 );
-
-export interface IUser extends Document {
-  imageUrl: string;
-  username: string;
-  accountType: string;
-  email: string;
-  password: string;
-  isActive: boolean;
-  address: string;
-  phoneNumber: string;
-  verificationToken: string | null;
-  isVerified: boolean;
-}
 
 const User = mongoose.model<IUser>("User", userSchema);
 export default User;

@@ -1,0 +1,14 @@
+{
+  "4": {
+    "id": "67ca9cd525f2f03bf9979e63",
+    "name": "gaming laptop",
+    "description": "this is a gaming laptop",
+    "category": "electronics"
+  },
+  "5": {
+    "id": "67ca9d9f25f2f03bf9979e67",
+    "name": "dress",
+    "description": "wedding dress",
+    "category": "home"
+  }
+}
