@@ -1,31 +1,46 @@
+import { CustomRequest } from "@middlewares/auth";
+import Cart from "@models/cart";
+import { IProduct } from "@models/product";
 import { ENV } from "config/env";
-import { Request, Response } from "express";
+import { Response } from "express";
 import Stripe from "stripe";
-import { v4 } from "uuid";
 
 class StripeController {
-  static async payStripe(req: Request, res: Response) {
-    const stripe = new Stripe(ENV.STRIPE_KEY);
-    const { token, amount } = req.body;
-    const idempotencyKey = v4();
-
+  static async payStripe(req: CustomRequest, res: Response) {
     try {
-      const customer = await stripe.customers.create({
-        email: token.email,
-        source: token.id, // Fix: Use token.id instead of token
-      });
-
-      const charge = await stripe.charges.create(
-        {
-          amount: amount * 100,
-          currency: "usd",
-          customer: customer.id,
-          receipt_email: token.email,
-        },
-        { idempotencyKey },
+      const userId = req.userId!;
+      const cart = await Cart.findOne({ user: userId }).populate(
+        "items.product",
       );
 
-      res.status(200).json({ message: "Payment Successful", data: charge });
+      if (!cart) {
+        res.status(404).json({ message: "Cart Not Found" });
+      }
+      const products = cart?.items;
+
+      const lineItems = products!.map((product) => ({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: (product.product as IProduct).name,
+            images: [(product.product as IProduct).image],
+          },
+          unit_amount: product.subtotal,
+        },
+        quantity: product.quantity,
+      }));
+
+      const stripe = new Stripe(ENV.STRIPE_KEY);
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: "payment",
+        success_url: "http://localhost:5173/order/success",
+        cancel_url: "http://localhost:5173/order/cancel",
+      });
+
+      res.status(200).json({ data: { session: session.id } });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Payment Failed", error: err });

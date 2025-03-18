@@ -4,6 +4,6 @@ import express from "express";
 
 const stripeRouter = express.Router();
 
-stripeRouter.post("/pay", auth, StripeController.payStripe);
+stripeRouter.get("/create-checkout-session", auth, StripeController.payStripe);
 
 export default stripeRouter;

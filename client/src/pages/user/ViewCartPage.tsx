@@ -2,8 +2,8 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import * as COMP from "@/components";
 import { useCartStore } from "@/store/cartStore";
 import useFetch from "@/hooks/useFetch";
-import { useNavigate } from "react-router-dom";
 import { Background } from "@/components/Background";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default function ViewCartPage() {
   const {
@@ -16,27 +16,31 @@ export default function ViewCartPage() {
   } = useCartStore();
 
   const { loading, error, triggerFetch } = useFetch();
-  const navigate = useNavigate();
 
-  const placeOrder = async () => {
+  const proceedToCheckout = async () => {
     try {
-      console.log(cart);
-      //TODO NAVIGATE TO SHOW ORDER IS PLACED
-      await triggerFetch(
-        "/order/create",
+      const stripe = await loadStripe(
+        "pk_test_51R1Oz7Rt564ooPGdwIVcStiPeUbckVgmIdSoGwpBo7yYXJuhA6FsJbLVaC9pTmJxdKwUO6sla84bxMHIWj0Q05xA004UFiaLKk",
+      );
+
+      const response = await triggerFetch(
+        "/stripe/create-checkout-session",
         {
-          method: "POST",
-          body: JSON.stringify({
-            products: cart,
-            paymentStatus: "cash_on_delivery",
-          }),
+          method: "GET",
         },
         true,
       );
 
+      const session = await response.session;
+      const result = await stripe!.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        console.log(result.error);
+      }
+
       clearCart();
-      console.log(cart);
-      navigate("/user/main");
     } catch (err) {
       console.error("Order placement failed", err);
     }
@@ -110,10 +114,10 @@ export default function ViewCartPage() {
               <div className="flex flex-col space-y-2">
                 <COMP.Button
                   className="w-full bg-prim hover:bg-hover"
-                  onClick={placeOrder}
+                  onClick={proceedToCheckout}
                   disabled={loading}
                 >
-                  {loading ? "Placing Order..." : "Place Order"}
+                  {loading ? "Proceeding To..." : "Proceed To Checkout"}
                 </COMP.Button>
                 <COMP.Button
                   className="w-full bg-red-600 hover:bg-red-700"

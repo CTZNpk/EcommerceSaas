@@ -39,7 +39,6 @@ class SocketController {
 
       // Handle sending a message
       socket.on("sendMessage", async ({ roomId, message, sender }) => {
-        console.log(message);
         const newMessage = new Message({ roomId, sender, message });
         await newMessage.save();
 
