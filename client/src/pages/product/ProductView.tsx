@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 import { AccountType } from "@/types/accountEnum";
-import { useCartStore } from "@/store/cartStore";
+import useCart from "@/hooks/useCart";
 
 interface IReview {
   id: string;
@@ -36,7 +36,7 @@ export default function ProductView() {
   const [updatedProduct, setUpdatedProduct] = useState<Partial<IProduct>>({});
   const { user } = useUserStore();
   const navigate = useNavigate();
-  const { addToCart } = useCartStore();
+  const { addToCart } = useCart();
 
   const isVendor = user?.accountType === AccountType.VENDOR;
   // TODO: Implement owner check
@@ -104,10 +104,11 @@ export default function ProductView() {
           <Star
             key={index}
             size={16}
-            className={`${index < Math.floor(rating)
+            className={`${
+              index < Math.floor(rating)
                 ? "text-yellow-400 fill-yellow-400"
                 : "text-gray-300"
-              }`}
+            }`}
           />
         ))}
         <span className="ml-2 text-sm text-gray-600">{rating.toFixed(1)}</span>
@@ -314,7 +315,7 @@ export default function ProductView() {
                       </div>
                       <div>
                         <span className="font-medium text-gray-500">SKU:</span>
-                        <p className="font-mono">{product.id}</p>
+                        <p className="font-mono">{product._id}</p>
                       </div>
                     </div>
                   </div>
@@ -324,7 +325,7 @@ export default function ProductView() {
                     {!isVendor && user && (
                       <COMP.Button
                         className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg"
-                        onClick={() => addToCart(product)}
+                        onClick={async () => await addToCart(product._id)}
                         disabled={!product.stock}
                       >
                         <ShoppingCart className="mr-2 h-5 w-5" />

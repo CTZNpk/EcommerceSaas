@@ -1,7 +1,7 @@
 import { CustomRequest } from "@middlewares/auth";
 import { Response } from "express";
 import Cart, { ICart } from "@models/cart";
-import Product from "@models/product";
+import Product, { IProduct } from "@models/product";
 import { ObjectId } from "mongoose";
 
 export class CartController {
@@ -45,7 +45,9 @@ export class CartController {
 
       await cart.save();
 
-      res.status(200).json({ message: "Product added to cart", cart });
+      res
+        .status(200)
+        .json({ message: "Product added to cart", data: { cart } });
     } catch (e) {
       console.error("Error adding to cart:", e);
       res.status(500).json({ message: "Internal Server Error" });
@@ -64,7 +66,9 @@ export class CartController {
         cart = new Cart({ user: userId, products: [] }) as ICart;
       }
 
-      res.status(200).json({ message: "Cart Retrieved Successfully", cart });
+      res
+        .status(200)
+        .json({ message: "Cart Retrieved Successfully", data: { cart } });
     } catch (error) {
       console.error("Error fetching cart:", error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -80,7 +84,9 @@ export class CartController {
         return;
       }
 
-      const cart = await Cart.findOne({ user: userId });
+      let cart = (await Cart.findOne({ user: userId }).populate(
+        "items.product",
+      )) as ICart;
 
       if (!cart) {
         res.status(404).json({ message: "Cart not found" });
@@ -88,7 +94,7 @@ export class CartController {
       }
 
       const productItem = cart.items.find(
-        (item) => item.product.toString() === productId,
+        (item) => (item.product as IProduct).id.toString() === productId,
       );
 
       if (!productItem) {
@@ -101,7 +107,9 @@ export class CartController {
 
       await cart.save();
 
-      res.status(200).json({ message: "Cart Updated Successfully", cart });
+      res
+        .status(200)
+        .json({ message: "Cart Updated Successfully", data: { cart } });
     } catch (error) {
       console.error("Error updating product quantity:", error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -112,8 +120,9 @@ export class CartController {
       const userId = req.userId;
       const productId = req.params.productId;
 
-      const cart = await Cart.findOne({ user: userId });
-
+      let cart = (await Cart.findOne({ user: userId }).populate(
+        "items.product",
+      )) as ICart;
       if (!cart) {
         res.status(404).json({ message: "Cart not found" });
         return;
@@ -141,7 +150,9 @@ export class CartController {
     try {
       const userId = req.userId;
 
-      const cart = await Cart.findOne({ user: userId });
+      let cart = (await Cart.findOne({ user: userId }).populate(
+        "items.product",
+      )) as ICart;
 
       if (!cart) {
         res.status(404).json({ message: "Cart not found" });

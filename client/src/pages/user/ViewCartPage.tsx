@@ -1,21 +1,30 @@
 import { Trash2, Plus, Minus } from "lucide-react";
 import * as COMP from "@/components";
-import { useCartStore } from "@/store/cartStore";
 import useFetch from "@/hooks/useFetch";
 import { Background } from "@/components/Background";
 import { loadStripe } from "@stripe/stripe-js";
+import { useEffect } from "react";
+import useCart from "@/hooks/useCart";
 
 export default function ViewCartPage() {
   const {
     cart,
-    totalPrice,
-    removeFromCart,
-    incrementQuantity,
     decrementQuantity,
+    incrementQuantity,
+    getCart,
+    removeProduct,
     clearCart,
-  } = useCartStore();
+    error,
+    loading,
+  } = useCart();
 
-  const { loading, error, triggerFetch } = useFetch();
+  useEffect(() => {
+    console.log("WE ARE IN HERER");
+    getCart();
+    console.log("NO WE ARE MOVING OUT");
+  }, []);
+
+  const { triggerFetch } = useFetch();
 
   const proceedToCheckout = async () => {
     try {
@@ -40,11 +49,18 @@ export default function ViewCartPage() {
         console.log(result.error);
       }
 
-      clearCart();
+      await triggerFetch(
+        "/cart/",
+        {
+          method: "DELETE",
+        },
+        true,
+      );
     } catch (err) {
       console.error("Order placement failed", err);
     }
   };
+
 
   return (
     <Background className="flex items-center justify-center">
@@ -55,57 +71,62 @@ export default function ViewCartPage() {
           </COMP.CardTitle>
         </COMP.CardHeader>
         <COMP.CardContent>
-          {cart.length === 0 ? (
+          {cart && cart!.items.length === 0 ? (
             <p className="text-center text-gray-600">Your cart is empty.</p>
           ) : (
             <div className="space-y-4">
-              {cart.map((item) => (
-                <div
-                  key={item.product.id}
-                  className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md"
-                >
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-16 h-16 rounded-md object-cover"
-                  />
-                  <div className="flex-1 ml-4">
-                    <h3 className="text-lg font-medium">{item.product.name}</h3>
-                    <p className="text-gray-600">${item.product.price}</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <COMP.Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() => decrementQuantity(item.product.id)}
-                    >
-                      <Minus size={16} />
-                    </COMP.Button>
-                    <span className="text-lg font-semibold">
-                      {item.quantity}
-                    </span>
-                    <COMP.Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() => incrementQuantity(item.product.id)}
-                    >
-                      <Plus size={16} />
-                    </COMP.Button>
-                  </div>
-                  <COMP.Button
-                    size="icon"
-                    variant="destructive"
-                    onClick={() => removeFromCart(item.product.id)}
+              {cart &&
+                cart!.items.map((item) => (
+                  <div
+                    key={item.product._id}
+                    className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md"
                   >
-                    <Trash2 size={16} />
-                  </COMP.Button>
-                </div>
-              ))}
+                    <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="w-16 h-16 rounded-md object-cover"
+                    />
+                    <div className="flex-1 ml-4">
+                      <h3 className="text-lg font-medium">
+                        {item.product.name}
+                      </h3>
+                      <p className="text-gray-600">${item.product.price}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <COMP.Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => decrementQuantity(item.product._id)}
+                      >
+                        <Minus size={16} />
+                      </COMP.Button>
+                      <span className="text-lg font-semibold">
+                        {item.quantity}
+                      </span>
+                      <COMP.Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => incrementQuantity(item.product._id)}
+                      >
+                        <Plus size={16} />
+                      </COMP.Button>
+                    </div>
+                    <COMP.Button
+                      size="icon"
+                      variant="destructive"
+                      onClick={() => removeProduct(item.product._id)}
+                    >
+                      <Trash2 size={16} />
+                    </COMP.Button>
+                  </div>
+                ))}
 
               {/* Total Price */}
-              <div className="text-xl font-bold text-center mt-4">
-                Total: ${totalPrice}
-              </div>
+              {cart && (
+                <div className="text-xl font-bold text-center mt-4">
+                  Total: ${cart!.totalCost}
+                </div>
+              )}
 
               {/* Display error if order placement fails */}
               {error && <p className="text-red-600 text-center">{error}</p>}

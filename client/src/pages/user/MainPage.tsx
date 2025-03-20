@@ -3,15 +3,15 @@ import { ShoppingCart, Search, Star, ShoppingBag, Layers } from "lucide-react";
 import * as COMP from "@/components";
 import useFetch from "@/hooks/useFetch";
 import { useNavigate } from "react-router-dom";
-import { useCartStore } from "@/store/cartStore";
 import { IProduct } from "@/types/product";
 import { Background } from "@/components/Background";
+import useCart from "@/hooks/useCart";
 
 export default function CustomerMainPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { loading, error, triggerFetch } = useFetch();
   const [items, setItems] = useState<IProduct[]>([]);
-  const { cart, addToCart } = useCartStore();
+  const { cart, addToCart } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,9 +66,9 @@ export default function CustomerMainPage() {
             className="cursor-pointer text-prim"
             onClick={navigateToCartScreen}
           />
-          {cart.length > 0 && (
+          {cart?.items && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-              {cart.length}
+              {cart?.items.length}
             </span>
           )}
         </div>
@@ -86,9 +86,9 @@ export default function CustomerMainPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {items.map((product) => (
               <COMP.Card
-                key={product.id}
+                key={product._id}
                 className="shadow-xl border border-gray-200 rounded-lg"
-                onClick={() => navigateToViewProductScreen(product.id)}
+                onClick={() => navigateToViewProductScreen(product._id)}
               >
                 <COMP.CardHeader>
                   <img
@@ -122,7 +122,7 @@ export default function CustomerMainPage() {
                   </div>
                   <COMP.Button
                     className="bg-prim hover:bg-hover w-full"
-                    onClick={() => addToCart(product)}
+                    onClick={async () => await addToCart(product._id)}
                   >
                     Add to Cart
                   </COMP.Button>
