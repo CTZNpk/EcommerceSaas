@@ -19,9 +19,7 @@ export default function ViewCartPage() {
   } = useCart();
 
   useEffect(() => {
-    console.log("WE ARE IN HERER");
     getCart();
-    console.log("NO WE ARE MOVING OUT");
   }, []);
 
   const { triggerFetch } = useFetch();
@@ -32,6 +30,7 @@ export default function ViewCartPage() {
         "pk_test_51R1Oz7Rt564ooPGdwIVcStiPeUbckVgmIdSoGwpBo7yYXJuhA6FsJbLVaC9pTmJxdKwUO6sla84bxMHIWj0Q05xA004UFiaLKk",
       );
 
+      console.log("WE ARE HERE");
       const response = await triggerFetch(
         "/stripe/create-checkout-session",
         {
@@ -39,28 +38,23 @@ export default function ViewCartPage() {
         },
         true,
       );
+      console.log("WE WOULD DO PROFILE ");
 
       const session = await response.session;
+      console.log("THIS IS THE SESSION");
+      console.log(session);
       const result = await stripe!.redirectToCheckout({
-        sessionId: session.id,
+        sessionId: session,
       });
+      await clearCart();
 
       if (result.error) {
         console.log(result.error);
       }
-
-      await triggerFetch(
-        "/cart/",
-        {
-          method: "DELETE",
-        },
-        true,
-      );
     } catch (err) {
       console.error("Order placement failed", err);
     }
   };
-
 
   return (
     <Background className="flex items-center justify-center">

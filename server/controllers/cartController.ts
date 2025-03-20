@@ -129,10 +129,12 @@ export class CartController {
       }
 
       const initialLength = cart.items.length;
+
       cart.items = cart.items.filter(
-        (item) => item.product.toString() !== productId,
+        (item) => (item.product as IProduct)._id.toString() !== productId,
       );
 
+      console.log(cart.items);
       if (cart.items.length === initialLength) {
         res.status(404).json({ message: "Product not found in cart" });
         return;

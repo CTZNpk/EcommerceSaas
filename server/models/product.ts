@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -57,6 +57,7 @@ const productSchema = new Schema(
 );
 
 export interface IProduct extends Document {
+  _id: ObjectId;
   name: string;
   image: string;
   price: number;

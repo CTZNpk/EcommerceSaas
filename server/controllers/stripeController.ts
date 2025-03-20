@@ -25,10 +25,12 @@ class StripeController {
             name: (product.product as IProduct).name,
             images: [(product.product as IProduct).image],
           },
-          unit_amount: product.subtotal,
+          unit_amount: product.subtotal * 100,
         },
         quantity: product.quantity,
       }));
+
+      console.log(lineItems);
 
       const stripe = new Stripe(ENV.STRIPE_KEY);
 

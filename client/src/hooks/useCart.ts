@@ -28,7 +28,7 @@ const useCart = () => {
   const clearCart = async () => {
     const response = (
       await triggerFetch(
-        "/cart/delete ",
+        "/cart/delete",
         {
           method: "DELETE",
         },
@@ -82,14 +82,12 @@ const useCart = () => {
   };
 
   const removeProduct = async (productId: string) => {
+    console.log(productId);
     const response = (
       await triggerFetch(
-        "/cart/update-quantity",
+        `/cart/${productId}`,
         {
-          method: "POST",
-          body: JSON.stringify({
-            productId: productId,
-          }),
+          method: "DELETE",
         },
         true,
       )
