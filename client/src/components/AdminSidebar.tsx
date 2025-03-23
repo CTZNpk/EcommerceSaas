@@ -23,13 +23,13 @@ export function AdminSidebar() {
       <div className="flex-1 overflow-auto py-2">
         <nav className="grid gap-1 px-2">
           {[
-            { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-            { to: "/orders", icon: ShoppingCart, label: "Orders" },
-            { to: "/products", icon: Package, label: "Products" },
-            { to: "/users", icon: Users, label: "Users" },
-            { to: "/analytics", icon: BarChart, label: "Analytics" },
-            { to: "/chat", icon: MessageSquare, label: "Chat Support" },
-            { to: "/settings", icon: Settings, label: "Settings" },
+            { to: "/admin/", icon: LayoutDashboard, label: "Dashboard" },
+            { to: "/admin/orders", icon: ShoppingCart, label: "Orders" },
+            { to: "/admin/products", icon: Package, label: "Products" },
+            { to: "/admin/users", icon: Users, label: "Users" },
+            { to: "/admin/analytics", icon: BarChart, label: "Analytics" },
+            { to: "/admin/chat", icon: MessageSquare, label: "Chat Support" },
+            { to: "/admin/settings", icon: Settings, label: "Settings" },
           ].map(({ to, icon: Icon, label }) => (
             <Link
               key={to}

@@ -29,7 +29,7 @@ export function VendorSidebar() {
         <nav className="grid gap-1 px-2">
           {[
             {
-              to: "/vendor/dashboard",
+              to: "/vendor/",
               icon: LayoutDashboard,
               label: "Dashboard",
             },

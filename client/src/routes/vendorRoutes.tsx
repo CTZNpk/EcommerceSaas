@@ -10,7 +10,7 @@ import { VendorProtectedRoute } from "@/utils/VendorProtectedRoute";
 
 export const vendorRoutes = [
   <Route
-    path="/vendor/dashboard"
+    path="/vendor/"
     element={
       <VendorProtectedRoute>
         <VendorDashboard />

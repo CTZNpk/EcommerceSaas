@@ -10,7 +10,7 @@ import Users from "../pages/admin/Users";
 
 export const adminRoutes = [
   <Route
-    path="/dashboard"
+    path="/admin/"
     element={
       <AdminProtectedRoute>
         <Dashboard />
@@ -18,7 +18,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/products"
+    path="/admin/products"
     element={
       <AdminProtectedRoute>
         <Products />
@@ -26,7 +26,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/users"
+    path="/admin/users"
     element={
       <AdminProtectedRoute>
         <Users />
@@ -34,7 +34,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/analytics"
+    path="/admin/analytics"
     element={
       <AdminProtectedRoute>
         <Analytics />
@@ -42,7 +42,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/chat"
+    path="/admin/chat"
     element={
       <AdminProtectedRoute>
         <ChatSupport />
@@ -50,7 +50,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/settings"
+    path="/admin/settings"
     element={
       <AdminProtectedRoute>
         <Settings />
@@ -58,7 +58,7 @@ export const adminRoutes = [
     }
   />,
   <Route
-    path="/orders"
+    path="/admin/orders"
     element={
       <AdminProtectedRoute>
         <Orders />
