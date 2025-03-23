@@ -1,4 +1,5 @@
 import { Route } from "react-router-dom";
+import { AdminProtectedRoute } from "@/utils/AdminProtectedRoute";
 import Dashboard from "../pages/admin/Dashboard";
 import Orders from "../pages/admin/Order";
 import Products from "../pages/admin/Products";
@@ -8,11 +9,60 @@ import Settings from "../pages/admin/Settings";
 import Users from "../pages/admin/Users";
 
 export const adminRoutes = [
-  <Route path="/dashboard" element={<Dashboard />} />,
-  <Route path="/products" element={<Products />} />,
-  <Route path="/users" element={<Users />} />,
-  <Route path="/analytics" element={<Analytics />} />,
-  <Route path="/chat" element={<ChatSupport />} />,
-  <Route path="/settings" element={<Settings />} />,
-  <Route path="/orders" element={<Orders />} />,
+  <Route
+    path="/dashboard"
+    element={
+      <AdminProtectedRoute>
+        <Dashboard />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/products"
+    element={
+      <AdminProtectedRoute>
+        <Products />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/users"
+    element={
+      <AdminProtectedRoute>
+        <Users />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/analytics"
+    element={
+      <AdminProtectedRoute>
+        <Analytics />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/chat"
+    element={
+      <AdminProtectedRoute>
+        <ChatSupport />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/settings"
+    element={
+      <AdminProtectedRoute>
+        <Settings />
+      </AdminProtectedRoute>
+    }
+  />,
+  <Route
+    path="/orders"
+    element={
+      <AdminProtectedRoute>
+        <Orders />
+      </AdminProtectedRoute>
+    }
+  />,
 ];

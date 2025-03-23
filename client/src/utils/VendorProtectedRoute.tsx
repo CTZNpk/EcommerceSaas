@@ -13,7 +13,7 @@ export function VendorProtectedRoute({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      triggerFetch("/admin/", {});
+      triggerFetch("/vendor/", {}, true);
     };
     verifyUser();
   }, []);

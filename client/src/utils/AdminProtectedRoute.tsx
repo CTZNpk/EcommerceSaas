@@ -13,7 +13,7 @@ export function AdminProtectedRoute({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      triggerFetch("/admin/", {});
+      triggerFetch("/admin/", {}, true);
     };
     verifyUser();
   }, []);
