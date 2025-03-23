@@ -157,228 +157,271 @@ export default function ProductView() {
       <div className="w-full">
         <COMP.Button
           variant="ghost"
-          className="absolute top-4 left-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white"
+          className="absolute top-4 left-4 z-50 bg-white/90 backdrop-blur-sm hover:bg-white shadow-md rounded-full p-3"
           onClick={() => navigate(-1)}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back
+          <ArrowLeft className="h-5 w-5" />
         </COMP.Button>
 
-        <div className="md:flex md:h-screen">
-          {/* Image Section */}
-          <div className="md:w-1/2 md:fixed md:top-0 md:left-0 md:h-full">
-            <div className="relative h-96 md:h-full">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              <Badge className="absolute top-4 right-4 bg-blue-500">
-                {product.category}
-              </Badge>
+        <div className="md:flex min-h-screen">
+          {/* Image Gallery Section */}
+          <div className="md:w-1/2 lg:w-[55%] xl:w-[60%] md:sticky md:top-0 md:h-screen">
+            <div className="relative h-[500px] md:h-full bg-gray-50 group">
+              {/* Main Image with Zoom Effect */}
+              <div className="relative h-full overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+
+                {/* Floating Badges */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm py-1 px-3">
+                    {product.category}
+                  </Badge>
+                  {product.stock <= 5 && (
+                    <Badge
+                      variant="destructive"
+                      className="flex items-center gap-1"
+                    >
+                      <span className="h-2 w-2 bg-white rounded-full animate-pulse" />
+                      {product.stock === 0
+                        ? "Out of Stock"
+                        : `Only ${product.stock} left`}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              {/* Thumbnail Grid */}
+              <div className="absolute bottom-4 left-0 right-0 px-4">
+                <div className="flex gap-3 justify-center">
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Details Section */}
-          <div className="md:w-1/2 md:ml-auto p-6 md:p-8 md:h-full md:overflow-y-auto">
-            {isEditing ? (
-              <div className="max-w-2xl mx-auto space-y-6">
-                <h2 className="text-2xl font-bold">Edit Product</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Product Name
-                    </label>
-                    <COMP.Input
-                      name="name"
-                      value={updatedProduct.name || ""}
-                      onChange={handleChange}
-                    />
+          {/* Product Details Section */}
+          <div className="md:w-1/2 lg:w-[45%] xl:w-[40%] p-6 md:p-8 lg:p-12 bg-white">
+            <div className="max-w-2xl mx-auto space-y-8">
+              {/* Product Header */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-start">
+                  <h1 className="text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
+                    {product.name}
+                  </h1>
+                  {isVendor && (
+                    <COMP.Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full shadow-sm"
+                      onClick={() => setIsEditing(!isEditing)}
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      {isEditing ? "Cancel Edit" : "Edit Product"}
+                    </COMP.Button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {renderRatingStars(product.rating || 0)}
+                  <span className="text-sm text-gray-500">
+                    {product.ratingCount} reviews • {product.purchaseCount} sold
+                  </span>
+                </div>
+              </div>
+
+              {/* Price Section */}
+              <div className="space-y-2">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-bold text-gray-900">
+                    ${Number(product.price).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              {/* Action Buttons */}
+              {!isEditing && (
+                <div className="flex flex-col gap-3">
+                  {!isVendor && user && (
+                    <COMP.Button
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl shadow-lg transition-all"
+                      onClick={async () => await addToCart(product._id)}
+                      disabled={!product.stock}
+                    >
+                      <ShoppingCart className="mr-2 h-5 w-5" />
+                      {product.stock ? "Add to Cart" : "Notify When Available"}
+                    </COMP.Button>
+                  )}
+
+                  <COMP.Button
+                    variant="outline"
+                    className="w-full py-6 text-lg rounded-xl border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                    onClick={handleContactVendor}
+                  >
+                    <Mail className="mr-2 h-5 w-5" />
+                    Contact Vendor
+                  </COMP.Button>
+                </div>
+              )}
+
+              {/* Product Details */}
+              {!isEditing ? (
+                <div className="space-y-8">
+                  {/* Specifications Grid */}
+                  <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-xl">
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-gray-500">Category</label>
+                        <p className="font-medium">{product.category}</p>
+                      </div>
+                      <div>
+                        <label className="text-gray-500">SKU</label>
+                        <p className="font-mono text-gray-700">{product._id}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-gray-500">Availability</label>
+                        <p className="font-medium">
+                          {product.stock > 0
+                            ? `${product.stock} in stock`
+                            : "Backorder available"}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-gray-500">Shipping</label>
+                        <p className="font-medium">Free worldwide shipping</p>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Description
-                    </label>
+                  {/* Description */}
+                  <div className="prose max-w-none border-t pt-8">
+                    <h3 className="text-xl font-bold mb-4">Product Details</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                /* Edit Form */
+                <div className="space-y-6 pt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        Product Name
+                      </label>
+                      <COMP.Input
+                        name="name"
+                        value={updatedProduct.name || ""}
+                        onChange={handleChange}
+                        className="rounded-lg"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Category</label>
+                      <COMP.Input
+                        name="category"
+                        value={updatedProduct.category || ""}
+                        onChange={handleChange}
+                        className="rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Description</label>
                     <COMP.Textarea
                       name="description"
                       value={updatedProduct.description || ""}
                       onChange={handleChange}
                       rows={5}
+                      className="rounded-lg"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Price ($)
-                      </label>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Price ($)</label>
                       <COMP.Input
                         name="price"
                         type="number"
                         value={updatedProduct.price || ""}
                         onChange={handleChange}
+                        className="rounded-lg"
                       />
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Stock
-                      </label>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Stock</label>
                       <COMP.Input
                         name="stock"
                         type="number"
                         value={updatedProduct.stock || ""}
                         onChange={handleChange}
+                        className="rounded-lg"
                       />
                     </div>
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <COMP.Button className="flex-1" onClick={handleUpdate}>
-                      <Save className="mr-2 h-4 w-4" /> Save
+                    <COMP.Button
+                      className="flex-1 bg-green-600 hover:bg-green-700 rounded-lg py-5"
+                      onClick={handleUpdate}
+                    >
+                      <Save className="mr-2 h-4 w-4" /> Save Changes
                     </COMP.Button>
                     <COMP.Button
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 rounded-lg py-5"
                       onClick={() => setIsEditing(false)}
                     >
-                      <X className="mr-2 h-4 w-4" /> Cancel
+                      <X className="mr-2 h-4 w-4" /> Discard
                     </COMP.Button>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="max-w-2xl mx-auto">
-                {/* Product Header */}
-                <div className="flex justify-between items-start mb-8">
-                  <h1 className="text-3xl font-bold tracking-tight">
-                    {product.name}
-                  </h1>
-                  <COMP.Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <Edit className="mr-2 h-4 w-4" /> Edit
-                  </COMP.Button>
-                </div>
+              )}
 
-                {/* Main Content */}
-                <div className="space-y-8">
-                  {/* Price and Rating */}
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div>
-                      <span className="text-3xl font-bold text-blue-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      {product.stock <= 5 && (
-                        <Badge className="ml-3 bg-red-500">
-                          {product.stock === 0 ? "Out of Stock" : "Low Stock"}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-end">
-                      {renderRatingStars(product.rating || 0)}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <div className="prose max-w-none">
-                    <h3 className="text-lg font-semibold mb-3">
-                      Product Details
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {product.description}
+              {/* Reviews Section */}
+              <div className="border-t pt-8">
+                <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
+                {reviews.length === 0 ? (
+                  <div className="text-center py-8 bg-gray-50 rounded-xl">
+                    <p className="text-gray-500 mb-4">
+                      Be the first to review this product!
                     </p>
+                    <COMP.Button variant="outline">Write a Review</COMP.Button>
                   </div>
-
-                  {/* Specifications Grid */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="space-y-2">
-                      <div>
-                        <span className="font-medium text-gray-500">
-                          Category:
-                        </span>
-                        <p>{product.category}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-500">
-                          Available:
-                        </span>
-                        <p>{product.stock} units</p>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div>
-                        <span className="font-medium text-gray-500">Sold:</span>
-                        <p>{product.purchaseCount || 0}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-500">SKU:</span>
-                        <p className="font-mono">{product._id}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col gap-3 mt-8">
-                    {!isVendor && user && (
-                      <COMP.Button
-                        className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg"
-                        onClick={async () => await addToCart(product._id)}
-                        disabled={!product.stock}
+                ) : (
+                  <div className="space-y-6">
+                    {reviews.map((review) => (
+                      <div
+                        key={review.id}
+                        className="p-4 bg-gray-50 rounded-xl hover:bg-white transition-all cursor-pointer border border-transparent hover:border-blue-200"
                       >
-                        <ShoppingCart className="mr-2 h-5 w-5" />
-                        {product.stock ? "Add to Cart" : "Out of Stock"}
-                      </COMP.Button>
-                    )}
-
-                    <COMP.Button
-                      variant="outline"
-                      className="w-full py-6 text-lg"
-                      onClick={handleContactVendor}
-                    >
-                      <Mail className="mr-2 h-5 w-5" />
-                      Contact Vendor
-                    </COMP.Button>
-                  </div>
-                </div>
-
-                {/* Reviews Section */}
-                <div className="mt-16 border-t pt-8">
-                  <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
-                  {reviews.length === 0 ? (
-                    <p className="text-gray-500 italic">
-                      No reviews yet. Be the first to review this product!
-                    </p>
-                  ) : (
-                    <div className="space-y-6">
-                      {reviews.map((review) => (
-                        <div
-                          key={review.id}
-                          className="border-b pb-6 last:border-0"
-                        >
-                          <div className="flex justify-between items-center mb-3">
-                            <div>
-                              <span className="font-medium">
-                                {review.username}
-                              </span>
-                              <span className="text-gray-500 text-sm ml-2">
-                                {new Date(
-                                  review.createdAt,
-                                ).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {renderRatingStars(review.rating)}
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <span className="font-medium text-blue-600">
+                              {review.username[0]}
+                            </span>
                           </div>
-                          <p className="text-gray-700">{review.comment}</p>
+                          <div>
+                            <h4 className="font-medium">{review.username}</h4>
+                            <p className="text-sm text-gray-500">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                        <div className="flex items-center gap-2 mb-2">
+                          {renderRatingStars(review.rating)}
+                        </div>
+                        <p className="text-gray-700">{review.comment}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

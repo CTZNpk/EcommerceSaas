@@ -34,7 +34,21 @@ const LoginForm = () => {
 
   const continueWithGoogle = async () => {
     setFormError("");
-    window.location.href = "http://localhost:3000/api/v1/auth/google";
+    try {
+      const data = await triggerFetch(
+        "/users/google",
+        {
+          method: "GET",
+        },
+        true,
+      );
+      if (data && !fetchError) {
+        setUser(data);
+        navigateToSignup();
+      }
+    } catch (err) {
+      setFormError("Unable to connect to the server. Please try again.");
+    }
   };
 
   const onSubmit = async (formData: LoginFormValues) => {

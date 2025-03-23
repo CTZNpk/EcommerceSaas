@@ -30,8 +30,6 @@ class StripeController {
         quantity: product.quantity,
       }));
 
-      console.log(lineItems);
-
       const stripe = new Stripe(ENV.STRIPE_KEY);
 
       const session = await stripe.checkout.sessions.create({
