@@ -544,11 +544,6 @@ export default function CustomerMainPage() {
                   </div>
 
                   {/* Hover Ribbon Effect */}
-                  <div className="absolute top-1/2 -right-8 group-hover:right-4 transition-all duration-500">
-                    <div className="bg-indigo-600 text-white px-4 py-1 transform -rotate-45 shadow-lg text-xs font-bold">
-                      FREE SHIPPING
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
