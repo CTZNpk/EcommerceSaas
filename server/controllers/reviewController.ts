@@ -38,7 +38,7 @@ class ReviewController {
             product: productId,
           },
         },
-        orderStatus: OrderStatus.DELIVERED,
+        // orderStatus: OrderStatus.DELIVERED,
       });
 
       if (!completedOrder) {
@@ -58,7 +58,7 @@ class ReviewController {
       });
       await newRating.save();
 
-      res.status(201).json(newRating);
+      res.status(201).json({ data: newRating });
     } catch (error) {
       console.error("Review creation error:", error);
       res.status(500).json({ message: "Server error", error: error });
@@ -68,8 +68,11 @@ class ReviewController {
   static async getProductReviews(req: CustomRequest, res: Response) {
     try {
       const { productId } = req.params;
+      console.log(productId);
       const reviews = await Rating.find({ productId }).sort({ createdAt: -1 });
-      res.status(200).json(reviews);
+      console.log("Hello herer");
+      console.log(reviews);
+      res.status(200).json({ data: reviews });
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
     }

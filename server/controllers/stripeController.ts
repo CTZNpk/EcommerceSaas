@@ -25,7 +25,7 @@ class StripeController {
             name: (product.product as IProduct).name,
             images: [(product.product as IProduct).image],
           },
-          unit_amount: product.subtotal * 100,
+          unit_amount: Math.round((product.product as IProduct).price * 100),
         },
         quantity: product.quantity,
       }));

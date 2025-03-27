@@ -8,6 +8,7 @@ import cartRouter from "./cartRoutes";
 import orderRouter from "./orderRoutes";
 import messageRouter from "./messageRoutes";
 import stripeRouter from "./stripeRouter";
+import reviewRouter from "./reviewRoutes";
 
 const apiRouter = express.Router(); // Parent router
 
@@ -20,5 +21,6 @@ apiRouter.use("/cart", cartRouter);
 apiRouter.use("/order", orderRouter);
 apiRouter.use("/message", messageRouter);
 apiRouter.use("/stripe", stripeRouter);
+apiRouter.use("/reviews", reviewRouter);
 
 export default apiRouter;

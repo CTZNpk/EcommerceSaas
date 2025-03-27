@@ -1,60 +1,31 @@
 import { CustomRequest } from "@middlewares/auth";
+import Cart from "@models/cart";
 import Product, { IProduct } from "@models/product";
 import { AccountType } from "@models/user";
 import { Request, Response } from "express";
-import Order, { IOrderItem, PaymentStatus, OrderStatus } from "models/order";
+import Order, { OrderStatus } from "models/order";
 import { ObjectId } from "mongoose";
+import { IOrderProduct } from "types/IOrderItem";
 export class OrderController {
   static async createOrder(req: CustomRequest, res: Response) {
     try {
-      const { paymentStatus } = req.body;
-
-      type Product = {
-        id: number;
-        quantity: number;
-      };
-      const products: Product[] = req.body.products;
-
       const buyer = req.userId;
 
-      if (
-        !buyer ||
-        !products ||
-        !Array.isArray(products) ||
-        products.length === 0
-      ) {
+      const cart = await Cart.findOne({ user: buyer }).populate(
+        "items.product",
+      );
+
+      const products = cart?.items;
+
+      if (!buyer || !products || products.length === 0) {
         res.status(400).json({ message: "Invalid order details" });
         return;
       }
 
-      const productDetails = await Promise.all(
-        products.map(async (item: Product) => {
-          const product = await Product.findById(item.id);
-          if (!product) {
-            // This error will be caught by the outer try/catch
-            throw new Error(`Product with ID ${item.id} not found`);
-          }
-          if (product.stock < item.quantity) {
-            throw new Error(`Insufficient stock for ${product.name}`);
-          }
-          return {
-            product: product,
-            quantity: item.quantity,
-            subtotal: product.price * item.quantity,
-          };
-        }),
-      );
-
-      const totalAmount = productDetails.reduce(
-        (sum, item) => sum + item.subtotal,
-        0,
-      );
-
       const order = new Order({
         buyer,
-        products: productDetails,
-        totalAmount,
-        paymentStatus,
+        products,
+        totalAmount: cart?.totalCost,
         orderStatus: OrderStatus.PENDING,
       });
 
@@ -62,11 +33,14 @@ export class OrderController {
 
       await Promise.all(
         products.map(async (item) => {
-          await Product.findByIdAndUpdate(item.id, {
+          await Product.findByIdAndUpdate((item.product as IProduct).id, {
             $inc: { stock: -item.quantity },
           });
         }),
       );
+
+      cart.items = [];
+      await cart.save();
 
       res
         .status(201)

@@ -1,8 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { useEffect } from "react";
+import useFetch from "@/hooks/useFetch";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
+  const { triggerFetch } = useFetch();
+
+  useEffect(() => {
+    console.log("WE ARE CALLING");
+    const placeOrder = async () => {
+      await triggerFetch("/order/create", { method: "POST" }, true);
+    };
+    placeOrder();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

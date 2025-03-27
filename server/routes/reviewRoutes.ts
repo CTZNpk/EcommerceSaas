@@ -6,7 +6,7 @@ const reviewRouter = express.Router();
 
 reviewRouter.post("/", auth, ReviewController.createReview);
 reviewRouter.get("/id/:id", auth, ReviewController.getReviewById);
-reviewRouter.get("/:ProductId", auth, ReviewController.getProductReviews);
+reviewRouter.get("/:productId", auth, ReviewController.getProductReviews);
 reviewRouter.put("/:id", auth, ReviewController.updateReview);
 reviewRouter.delete("/:id", auth, ReviewController.deleteReview);
 reviewRouter.get("/", auth, ReviewController.getUserReviews);

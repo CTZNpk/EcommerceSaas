@@ -8,7 +8,7 @@ export const Background = ({
   className?: string;
 }) => {
   return (
-    <div className={`${className} min-h-screen bg-light`}>
+    <div className={`${className} min-h-screen `}>
       {children}
     </div>
   );
