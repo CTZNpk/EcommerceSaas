@@ -13,7 +13,7 @@ export function UserProtectedRoute({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      triggerFetch("/user/", {});
+      triggerFetch("/user/", {}, true);
     };
     verifyUser();
   }, []);

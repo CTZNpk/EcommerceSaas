@@ -10,9 +10,7 @@ passport.use(
       callbackURL: ENV.GOOGLE_CALLBACK_URL,
     },
     async (_: string, __: string, profile: Profile, done) => {
-      return done(null, {
-        profile,
-      });
+      return done(null, profile);
     },
   ),
 );

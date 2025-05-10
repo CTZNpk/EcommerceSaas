@@ -21,7 +21,7 @@ const applyMiddlewares = (app: express.Application) => {
   new SocketController(server);
   server.listen(ENV.PORT, () => {
     console.log(`Server running on port ${ENV.PORT}`);
-  });
+  });;
 };
 
 export default applyMiddlewares;

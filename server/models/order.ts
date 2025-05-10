@@ -62,11 +62,6 @@ const orderSchema = new Schema<IOrder>(
       required: true,
       default: 0,
     },
-    paymentStatus: {
-      type: String,
-      enum: Object.values(PaymentStatus),
-      required: true,
-    },
     orderStatus: {
       type: String,
       enum: Object.values(OrderStatus),
@@ -81,7 +76,7 @@ const orderSchema = new Schema<IOrder>(
 );
 
 // Middleware to calculate subtotal & total amount before saving
-orderSchema.pre("save", function(next) {
+orderSchema.pre("save", function (next) {
   this.products.forEach((item) => {
     item.subtotal = item.quantity * item.price;
   });

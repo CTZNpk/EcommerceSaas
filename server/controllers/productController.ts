@@ -45,7 +45,6 @@ export class ProductController {
 
       const productIds = fastApiResponse.data.results; // Assuming it's an array of product IDs
 
-
       if (!productIds.length) {
         res
           .status(200)
@@ -72,22 +71,18 @@ export class ProductController {
 
   static async getProducts(_: Request, res: Response) {
     try {
-      const products = await Product.find({ isActive: true }).lean();
+      const products = await Product.find({ isActive: true });
       if (!products) {
         res.status(404).json({
           message: "No Products Found",
         });
         return;
       }
-      const formattedProducts = products.map(({ _id, ...rest }) => ({
-        id: _id.toString(),
-        ...rest,
-      }));
 
       res.status(200).json({
         message: "Products Retrieved Successfully",
         data: {
-          products: formattedProducts,
+          products: products,
         },
       });
     } catch (error) {

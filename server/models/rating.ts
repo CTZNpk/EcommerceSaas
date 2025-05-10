@@ -28,7 +28,7 @@ export interface IRating extends Document {
   userId: String;
   productId: String;
   rating: Number;
-  review: Number;
+  review: String;
 }
 
 const Rating = mongoose.model<IRating>("Rating", ratingSchema);

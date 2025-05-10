@@ -3,6 +3,7 @@ import User, { IUser, UserStatus } from "@models/user";
 import bcrypt from "bcrypt";
 import { attachAccessToken, attachRefreshToken } from "utils/authUtils";
 import { createUserFromGoogle } from "@services/authServices";
+import { Profile } from "passport";
 
 class AuthController {
   static async register(req: Request, res: Response) {
@@ -78,21 +79,23 @@ class AuthController {
 
   static async handleGoogleAuth(req: Request, res: Response) {
     try {
-      const { profile } = req.body;
+      const profile = req.user as Profile;
 
-      let user = await User.findOne({ email: profile.emails?.[0].value });
+      let isNew = false;
+      let user = await User.findOne({ email: profile?.emails?.[0]?.value });
       if (!user) {
-        user = await createUserFromGoogle(profile);
+        isNew = true;
+        user = await createUserFromGoogle(profile!);
       }
 
       attachAccessToken(res, user._id as string, user.accountType);
       attachRefreshToken(res, user._id as string, user.accountType);
 
-      res.json({
-        message: "User Google Authentication Successful",
-        data: user,
-      });
-      res.redirect("http://localhost:5173/dashboard");
+      if (isNew) {
+        res.redirect("http://localhost:5173/");
+      } else {
+        res.redirect("http://localhost:5173/dashboard");
+      }
     } catch (error) {
       console.log("Registration error:", error);
       res.json({ message: "Internal Server Error" });

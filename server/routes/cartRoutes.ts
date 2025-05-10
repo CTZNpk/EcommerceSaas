@@ -12,13 +12,13 @@ cartRouter.post(
   isUser,
   CartController.updateProductQuantity,
 );
+
+cartRouter.delete("/delete", auth, isUser, CartController.clearCart);
 cartRouter.delete(
-  "/delete/:productId",
+  "/:productId",
   auth,
   isUser,
   CartController.removeProductFromCart,
 );
-
-cartRouter.delete("/delete", auth, isUser, CartController.clearCart);
 
 export default cartRouter;
